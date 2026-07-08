@@ -154,6 +154,8 @@ A [specific scene]. [Specific detail]. [Specific detail]. [Lighting]. No people.
 
 **Budget per week:** ~500 credits for image posts, ~1000 credits for video. Stay under to avoid mid-month credit exhaustion.
 
+For the **full prompt library per model** (kling 3.0, seedance 2.0 4k, veo 3.1, sora 2 max, grok video, hailuo 2.3) — including what-good/what-reject gates per model — see `docs/higgsfield-prompts.md`.
+
 ---
 
 ## Quality check after generation

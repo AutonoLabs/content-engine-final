@@ -190,6 +190,32 @@ Updates `brands/<brand>/performance-log.md`.
 
 ---
 
+## Step 11: Compare to past (15 min) — pattern detection
+
+**This is the learning loop.** Pull engagement data, then run the comparison engine to surface which themes/hooks/narrative styles/visual styles/audiences/audience segments actually won engagement.
+
+```bash
+python scripts/compare_performance.py --brand <brand>
+```
+
+Output includes:
+- Overall summary (avg, best, worst, median)
+- By-platform breakdown
+- Top + bottom per field: theme, narrative_style, hook_pattern, visual_style
+- **Actionable suggestions** ("lean into X, reduce Y")
+
+**Use the output to inform next week's plan (Step 2).** Specifically:
+- Drop bottom performers (themes that lose)
+- Lean into top performers (themes that win)
+- Check platform-specific winners (architectural wins on LinkedIn, documentary wins on TikTok)
+- Don't over-rotate: diversity rules still apply — winners ≠ only theme
+
+**Document patterns in `brands/<brand>/weeks/<week>/RETRO.md`** (see "Pattern observations" section).
+
+Full engine docs: `docs/compare-performance.md`.
+
+---
+
 ## End-of-week retrospective (20 min)
 
 ```markdown
@@ -220,7 +246,8 @@ Save to `brands/<brand>/weeks/<week>/RETRO.md`.
 - `ONBOARDING.md` — first-time setup
 - `skills/brand-adapter.md` — new brand onboarding
 - `docs/diversity-rules.md` — rotation enforcement
+- `docs/compare-performance.md` — pattern detection from past posts
 - `docs/publish-runbook.md` — pre-flight checklist
 - `brands/content-mix.template.md` — diversity tracker
 
-**Last updated:** 2026-07-08
+**Last updated:** 2026-07-08 (added Step 11: compare to past)
