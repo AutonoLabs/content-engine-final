@@ -66,12 +66,20 @@ Roboverse emphasizes: **video prompts should specify camera + subject motion + l
 
 **Then:** the same character can be placed in any scene via the "customize" step. **This is how you build a consistent brand without ever filming a real person.**
 
-**Yapper Soul candidates:**
-1. **"Margaret"** — the warm older woman archetype. Real adult children of her generation would see her and feel known. Set up with: long silver-gray hair, warm smile, soft knit clothing palette, lavender + mint colors. Put her in: phone booth, reading nook, family dinner, by a window.
-2. **"CNA Diane"** — staff archetype for B2B content. Mid-50s, calm expression, badge, comfortable scrubs, dependable. Put her in: nurse station, hallway at dusk, dashboard on screen, family member meeting.
-3. **"Daughter Rebecca"** — family-facing archetype. Late 30s, exhausted-but-present expression, phone in hand, soft-blazer professional. Put her in: living room on call, kitchen during morning routine, hugging a parent.
+**Yapper Soul candidates (6 — 3 men, 3 women, balanced demographic):**
 
-Each Soul gets its own character ID on Higgsfield. They never cross-contaminate (per our existing Soul ID isolation rule).
+1. **Margaret** — warm older woman archetype, ~75. Long silver-gray hair, soft knit in lavender + mint, gentle smile, ink-plum or navy cardi. Reuse across phone booth, reading nook, family dinner, by window.
+2. **Tom** — warm older man archetype, ~78. Silver-white hair, weathered hands, glasses, often in a cardigan over a checked shirt, reading chair or workshop. The character who proves Yapper isn't just for older women. **Critical for the lonely-men-actually-taking-the-call story.**
+3. **CNA Diane** — staff archetype for B2B. Mid-50s, calm expression, badge, comfortable scrubs.
+4. **CNA Marcus** — male staff counterpart to Diane. Mid-40s, friendly expression, athletic build under scrubs, can be in hallway at dusk or helping a resident to a seat. Important so we don't imply all care staff are women.
+5. **Rebecca** — adult daughter archetype. Late 30s, phone in hand, soft blazer. Family-facing DTC content.
+6. **Daniel** — adult son archetype. Late 30s/early 40s, hands often full (kid, work, parent), phone in hand, often at the office or in the car. Lives in the same guilt as Rebecca but rarely talks about it.
+
+**Why 6, why males:** Per NCAL, 67% of assisted living residents are women, 33% men. But AARP 2025 reports men are now lonelier than women (42% vs 37%). Men also report worse quality of life in nursing homes than women per recent Medicare Advocacy data. A brand that only depicts older women as its audience is dishonest about who actually needs the call — and misses the audience that needs it most. Tom, Marcus, and Daniel exist to fill that gap without making it feel performative.
+
+**Soul isolation:** Each Soul gets its own character ID on Higgsfield. They never cross-contaminate (per our existing Soul ID isolation rule for multi-brand separation, this same mechanism isolates personas within Yapper too).
+
+Each Soul ID is isolated (per our existing rule). Use `refs/01-logo.png` + `04-rotary-phone.jpeg` + `05-phone-booth-hallway.png` as initial reference images for tone.
 
 ---
 
