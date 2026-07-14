@@ -44,7 +44,7 @@ Pattern: 1 longer sentence (context) → 2-3 short (emphasis) → 1 fragment (pu
 - 40% specific statement: "Martha talks to Rose every morning at 10."
 - 25% observation: "Most residents won't fill out a satisfaction form."
 - 20% contrarian: "The phone is the most underrated piece of care technology."
-- 15% emotional: "She cried because someone called her."
+- 15% emotional: "She stayed on the line because the conversation felt familiar."
 
 No rhetorical questions on LinkedIn. OK on X and TikTok hooks.
 
@@ -86,45 +86,39 @@ Never: "let me know what you think", "drop a comment", "share if you agree", "th
 
 ---
 
-## Hard constraints
+## Working ranges and hard constraints
+
+These are starting hypotheses for testing, not universal algorithm rules. The platform playbook in `research/cross-platform-attention-playbook.md` controls format-specific decisions.
 
 ```yaml
-constraints:
-  length:
-    linkedin:
-      min: 600
-      max: 1200
-      target: 900
-    x:
-      min: 180
-      max: 280
-      target: 230
-    threads:
-      min: 200
-      max: 500
-      target: 350
-    instagram:
-      min: 400
-      max: 2000
-      target: 1000
-    tiktok:
-      min: 80
-      max: 350
-      target: 200
-    youtube_shorts:
-      min: 100
-      max: 400
-      target: 250
+working_ranges:
+  linkedin:
+    image_caption: 300-700 characters
+    short_video_caption: 150-450 characters
+    founder_or_operator_insight: 600-1200 characters when earned
+  x:
+    single_post: 70-220 characters preferred; never exceed platform limit
+  threads:
+    conversation_start: 80-300 characters
+  instagram:
+    reel_caption: 1-5 short lines; video must stand alone
+    carousel_caption: 150-500 characters to begin testing
+  tiktok:
+    caption: one concise context line plus one answerable question
+  youtube_shorts:
+    title_and_description: clear, concise, and secondary to the video story
 
+constraints:
   emoji: minimal (max 1 per post, only if natural)
   hashtags:
-    linkedin: 3-5 at end
-    x: 0-2 inline
-    instagram: 5-8 at end
-    threads: 0-2
-    tiktok: 3-5
-
+    linkedin: 1-3 focused tags at end
+    x: 0-2
+    instagram: relevant and restrained; no tag stuffing
+    threads: one relevant Topic Tag where available
+    tiktok: relevant discovery tags only
+    youtube_shorts: relevant niche tags only
   medical_disclaimer: required on any post mentioning health, memory, cognition, or wellbeing
+  calendar_media: required on every post except ordinary Reddit comments
 ```
 
 ---
@@ -142,7 +136,7 @@ constraints:
 9. **Compliance is load-bearing.** Yapper is NOT a medical device. This shapes every claim. Wellness and companionship, never diagnosis or treatment.
 10. **One audience per post.** Operators (facility admins, activity directors), or residents' families (adult children). Never blur.
 11. **Sound like a person, not a brand account.** Write like you're texting a colleague or posting on your personal account. No brand voice. No "we're excited to..." No corporate polish. If it sounds like it could be on any other company's feed, rewrite it.
-12. **Platform-native attention capture.** Every post is engineered for the first 0.5-2 seconds on that specific platform. LinkedIn: bold first line, pattern interrupt before the fold. X: punchy, under 8 words first line. TikTok: visual hook in first frame + text overlay. Instagram: scroll-stopping image + first line of caption before "...more". Threads: casual, like talking to a friend. The goal isn't likes — it's stop, read, stay, click.
+12. **Platform-native attention capture.** Treat “0.1 second” as a design mindset, not a universal metric: the first frame and first visible line must be understood instantly at mobile size. Adapt the same idea natively rather than copying one caption everywhere. Use `research/cross-platform-attention-playbook.md` for platform-specific hooks, pacing, interaction, and measurement.
 13. **Drive to action.** Every post has a purpose: get them to the website, book a call, try the demo, read the blog. Don't force it — make the CTA feel like the natural next step after reading. Some posts: soft CTA ("try the live demo" in passing). Some posts: direct ("book a call"). Rotate. Never every post screaming "BOOK NOW."
 
 ---
@@ -176,16 +170,16 @@ constraints:
 
 ## Higgsfield visual rules (for media generation)
 
-- **Palette (from Brand Pack v4):** Lavender `#7B61AD` (brand anchor), Ink Plum `#241C36` (dark surfaces, never pure black), Mint `#98FFD9` (signature accent — live, positive, human), Mint Deep `#3ECF9B` (mint on light grounds), Lavender Mist `#F4F0FA` (section grounds)
+- **Palette (from Brand Pack v4):** Lavender `#7B61AD` (brand anchor), Lavender 700 `#4E3E71` (depth/hover), Ink Plum `#241C36` (dark surfaces, never pure black), Mint `#98FFD9` (signature accent), Mint Deep `#3ECF9B` (accessible mint on light grounds), Lavender Mist `#F4F0FA` (light grounds)
 - **Color rules:** Mint is accent only, never text-bearing ground. One purple, no gradients. Dark = ink plum not black. In product: mint = positive states, amber/red = flags, never purple for alerts.
-- **Subjects:** elderly residents in real facility settings, rotary phones, phone booths, hands holding receivers, activity rooms, common areas
+- **Subjects:** older residents in real facility or home settings, rotary phones, phone booths, hands holding receivers, activity rooms, common areas
 - **Mood:** dignified, warm, lived-in, documentary-style
 - **Pattern:** use "Documentary / real" pattern from docs/higgsfield-prompts.md (iPhone photo feel, specific props, imperfection)
-- **NO:** clinical/medical imagery, stock photo compositions, AI-generated faces (use hands, objects, over-shoulder), visible logos, sad/victim framing, perfect lighting
+- **NO:** clinical/medical imagery, stock compositions, generic or inconsistent AI faces, fake/generated logos, sad/victim framing, or perfect studio lighting. Use approved trained Souls for recurring people; apply the authentic Yapper wordmark after generation.
 - **Resident representation:** real moments, not staged. Crumpled receipt on a side table. A rotary phone on a wooden surface. Hands on a receiver. A phone booth in a hallway.
-- **BRAND RECOGNITION (mandatory):** every image/video must weave in Yapper brand colors (navy/purple #1a1b2e, purple #6B5CE7, teal/mint #2DD4BF) naturally — a teal mug on the table, a purple blanket on a chair, navy wall in the background, a phone booth with subtle purple/teal accents. Not a logo slap. The colors should feel ambient, like the facility was designed with these tones. Some posts can be heavy brand (dominant purple/teal), some can be subtle (one teal object in frame). Rotate the intensity.
-- **BRAND COLOR BAKED INTO EVERY PROMPT:** add a brand-color element to every Higgsfield prompt. Use the canonical hex names: lavender (#7B61AD), ink plum (#241C36), mint (#98FFD9), mint deep (#3ECF9B), lavender mist (#F4F0FA). Examples: "a mint deep mug on the side table", "a lavender throw blanket on the armchair", "ink plum accent wall in the background", "the phone booth has subtle mint trim." Rotate which colors appear and how dominant they are. Never force all colors into every image — 1-2 per image, naturally placed. Dark surfaces are ink plum, not black.
-- **VIDEO BRAND SIGNATURE (mandatory for every video):** every video must end with the Yapper brand identity visible. Two ways to achieve this (pick one per video, rotate): (1) Final 2-3 seconds: the scene transitions to an ink plum background with the Yapper logo (dial dots mark) centered in lavender/mint, holds for 2s. (2) The last frame has a subtle Yapper logo watermark in the corner + brand colors dominant in the final shot. The rotary dial → logo morph from the animation scripts is the gold standard when achievable. Never publish a video without brand recognition in the final frames.
+- **BRAND RECOGNITION (mandatory):** every image/video must weave in 1-2 canonical v4 colors naturally—such as a mint deep mug, lavender throw, ink plum cardigan, or lavender mist wall. Never use the obsolete navy/bright-purple/teal palette. Rotate intensity; do not force every color into every scene.
+- **BRAND COLOR BAKED INTO EVERY PROMPT:** add a brand-color element to every Higgsfield prompt. Use the canonical hex names: lavender (#7B61AD), lavender 700 (#4E3E71, depth only), ink plum (#241C36), mint (#98FFD9), mint deep (#3ECF9B), lavender mist (#F4F0FA). Examples: "a mint deep mug on the side table", "a lavender throw blanket on the armchair", "ink plum accent wall in the background", "the phone booth has subtle mint trim." Rotate which colors appear and how dominant they are. Never force all colors into every image — 1-2 per image, naturally placed. Dark surfaces are ink plum, not black.
+- **VIDEO BRAND SIGNATURE (mandatory for every video):** every video must end with the authentic Yapper identity visible. Preferred close: the scene transitions to ink plum, then the official ten-dot lavender 270-degree rotary arc and mint finger stop appear with the authentic Yapper wordmark and hold for two seconds. A subtle authentic corner lockup is acceptable when the full end card is not possible. Never use a generated approximation of the logo or publish a video without recognizable Yapper identity in the final frames.
 - **AUDIO/SOUND DESIGN (mandatory for every video):** specify the background audio in every Higgsfield brief. Options: (a) ambient sound design (soft mechanical clicks, phone ring, ambient room tone), (b) trending TikTok/Reels audio (specify the track name + mood), (c) soft instrumental (warm piano, gentle strings, ambient pulse). For emotional posts: minimal piano or ambient. For product demos: upbeat but understated. Always specify whether the audio is generated by Higgsfield or added post-publish in TikTok/Reels editor. When in doubt: soft ambient pulse with a warm chime on the logo close.
 - **BANNED IMAGERY (from Brand Pack v4):** stock hand-holding, hospital beds, robots, brains, circuit textures, cartoon elders, anyone baffled by technology. No pure black backgrounds (use ink plum #241C36). No purple→blue gradients. No violet glows.
 

@@ -13,6 +13,17 @@
 - No 3 consecutive same visual style
 - Each month hits 2+ audience segments
 - Each week hits 3+ platforms
+- No 2 consecutive posts use the same hook family or visual grammar
+- Each post has one audience, one primary idea, and one CTA
+- First frame and first visible line must be understood instantly at mobile size
+
+## Creative portfolio
+
+- 60% proven structures
+- 30% controlled experiments
+- 10% creative wildcards
+
+Rotate among the 12 formats in `research/cross-platform-attention-playbook.md`. Repeat winning structures with new stories and points of view; do not repeat the same surface treatment.
 
 ---
 
@@ -20,14 +31,16 @@
 
 | Format | Frequency | Media source |
 |---|---|---|
-| Image (square/portrait) | 2-3x/week | Higgsfield (Nano Banana Pro) or manual |
-| Video (15-60s) | 1-2x/week | Higgsfield (veo-3.1 or hailuo-2.3) |
+| Image (square/portrait) | 1-2x/week | Higgsfield (Nano Banana Pro) or manual |
+| Video (15-60s) | 1-2x/week | Higgsfield-selected model |
 | Carousel (3-6 slides) | 1x/week | Higgsfield images or manual design |
-| Text-only | 0-1x/week (rare) | None |
+| UGC/direct-to-camera | 0-1x/week | Higgsfield Soul or approved human capture |
+| Audio-led/phone-ring short | 0-1x/week | Higgsfield video + designed audio |
+| Sanitized product walkthrough | 0-1x/week | Approved staged UI + manual edit |
 | PDF/article | 0-1x/month | Manual |
 | Review/share | 0-1x/month | Manual |
 
-**Higgsfield is the default media source.** Text-only is the exception, not the rule.
+**Every calendar post receives media.** Ordinary Reddit comments are the only normal exception. Higgsfield is the default source; the format and production path rotate.
 
 ---
 
@@ -67,6 +80,14 @@ Each week, output a plan table:
 - Too many text-only (4/6). Needs rebalance to include visuals on every post.
 - Only 2 narrative styles used (Observation, Personal Reckoning, Specific Number, Process Reveal). OK diversity.
 - Only 1 audience segment dominant (Operators). Need to add more family content.
+
+### 2026-W29 — Attention system validation
+
+| # | Date | Platform | Format | Narrative | Hook | Visual | Segment | Status |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 2026-07-14 | LinkedIn | 4:5 image + caption | Product-design contrast | Contrarian | Warm close-up, ordinary phone, authentic Yapper wordmark | Operators | SCHEDULED — 9:00 a.m. ET |
+
+Record: `weeks/2026-W29/linkedin-test-2026-07-14.md`
 
 ---
 

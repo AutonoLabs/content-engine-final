@@ -235,4 +235,4 @@ NO pure black. NO violet glows. NO clinical whites.
 
 ## Action
 
-Rafael: pick a model in Higgsfield (or use the recommendation in each brief), paste the prompt, generate, drop the file in `/Users/elibernstein/content-engine-final/brands/yapper/inbox/media/2026-W28/` named like `linkedin-launch.png` or `instagram-reel-launch.mp4`. I'll handle upload + scheduling via Blotato.
+Rafael: pick a model in Higgsfield (or use the recommendation in each brief), paste the prompt, generate, then return the file in Discord using the naming pattern `linkedin-launch.png` or `instagram-reel-launch.mp4`. The approved file is then placed in the repo-relative `brands/yapper/inbox/media/2026-W28/` staging directory for upload and scheduling via Blotato.

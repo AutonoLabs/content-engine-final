@@ -27,14 +27,14 @@
 
 ### yapper-001
 
-- **Claim:** "Senior loneliness is now considered as harmful as smoking 15 cigarettes a day."
-- **Source:** Dr. Vivek Murthy, former U.S. Surgeon General (public statement)
-- **Author/publisher:** U.S. Surgeon General's Office
-- **Date accessed:** 2026-07-08
-- **Verified by:** Herschel (from yapper.care website copy)
-- **Methodology:** Public statement by Surgeon General, widely cited
-- **Used in post:** yapper.care homepage, About page
-- **Re-verification due:** 2027-07-08
+- **Claim:** "Lacking social connection is as dangerous as smoking up to 15 cigarettes a day."
+- **Primary source:** U.S. Surgeon General, *Our Epidemic of Loneliness and Isolation* (2023), https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf
+- **Underlying evidence:** Holt-Lunstad, Smith & Layton, *Social Relationships and Mortality Risk: A Meta-analytic Review* (2010), https://pmc.ncbi.nlm.nih.gov/articles/PMC2910600/
+- **Author/publisher:** Office of the U.S. Surgeon General / HHS
+- **Date accessed:** 2026-07-14
+- **Methodology note:** This is a population-level mortality-risk comparison, not a Yapper outcome claim and not proof that any product prevents harm.
+- **Used in post:** Use sparingly and only with accurate context plus the companionship/not-a-medical-device disclaimer.
+- **Re-verification due:** 2027-07-14
 - **Status:** active
 
 ### yapper-002
@@ -47,7 +47,7 @@
 - **Methodology:** Unknown — needs confirmation from team on how this was measured
 - **Used in post:** Not yet used in social content
 - **Re-verification due:** 2026-10-08 (quarterly — needs methodology confirmation)
-- **Status:** active (pending methodology confirmation)
+- **Status:** locked — methodology and denominator not verified; do not publish
 
 ### yapper-003
 
@@ -59,7 +59,7 @@
 - **Methodology:** Unknown — likely current platform metric. Needs confirmation on whether this is a real-time number or marketing figure.
 - **Used in post:** Not yet used in social content
 - **Re-verification due:** 2026-10-08
-- **Status:** active (pending confirmation: real-time or marketing?)
+- **Status:** locked — source context and methodology not verified; do not publish
 
 ### yapper-004
 
@@ -71,7 +71,7 @@
 - **Methodology:** Unknown — needs confirmation
 - **Used in post:** Not yet used in social content
 - **Re-verification due:** 2026-10-08
-- **Status:** active (pending methodology)
+- **Status:** locked — methodology and sample not verified; do not publish
 
 ### yapper-005
 
@@ -83,7 +83,7 @@
 - **Methodology:** Unknown — context unclear
 - **Used in post:** Not yet used
 - **Re-verification due:** 2026-10-08
-- **Status:** pending (need to confirm what the 14% refers to before using)
+- **Status:** locked — metric definition, baseline, and methodology unknown; do not publish
 
 ---
 
@@ -91,6 +91,7 @@
 
 - 2026-07-08: Initial claims yapper-001 through yapper-005 extracted from yapper.care website by Herschel
 - 2026-07-08: Claims 002-005 need founder confirmation on methodology before use in social content
+- 2026-07-14: Claim 001 upgraded to the primary HHS advisory plus underlying meta-analysis; claims 002-005 explicitly locked until methodology is documented
 
 ---
 
