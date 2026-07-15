@@ -147,7 +147,7 @@ HIGGSFIELD_API_KEY=your_key_here
 
 1. **Immediately rotate** — Blotato/Higgsfield dashboards
 2. **Audit usage** — check for unexpected posts
-3. **Document incident** — log in `docs/INCIDENTS.md`
+3. **Document incident** — log in your brand's `weeks/<YYYY-W##>/incidents.md`
 
 ---
 

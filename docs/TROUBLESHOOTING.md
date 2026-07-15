@@ -158,7 +158,7 @@ playwright install chromium
 **Cause:** Source video >20 min, or server slow.
 
 **Fix:**
-1. Poll manually: `python scripts/blotato_get_source_status.py <source-id>`
+1. Poll manually via Blotato dashboard or check `scripts/blotato_get_post_status.py` for the post submission.
 2. Or fallback to curl + BeautifulSoup
 3. Or skip content pull for this post
 

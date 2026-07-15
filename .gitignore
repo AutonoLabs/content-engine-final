@@ -1,19 +1,39 @@
+# Secrets
 .env
 .env.local
-.DS_Store
-*.log
-node_modules/
+
+# Generated media (per-brand inbox is gitignored by default to avoid
+# bloating the repo with binary assets; pairs with scripts/pair_media.py
+# which moves files out of inbox/ when matched to a packet)
+brands/*/inbox/media/
+
+# Generated media in week folders (when run via media_packet.py + pair_media.py,
+# files end up next to their packets — these are still binary, ignore)
+brands/*/weeks/*/media-packets/*.mp4
+brands/*/weeks/*/media-packets/*.png
+brands/*/weeks/*/media-packets/*.jpg
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
 .venv/
 venv/
-build/
-dist/
-*.egg-info/
-.pytest_cache/
-.coverage
-.claude/
-.hermes/
-.openclaw/
-inbox/
-exemplars/edits/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor temp
+*.bak
+*.tmp
+*~
+
+# Virtualenv marker (in case it slips in)
+.envrc

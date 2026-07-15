@@ -23,6 +23,10 @@ platform: linkedin
 seed_posts_count: 7
 extracted_at: 2026-07-07
 
+# SECTOR (drives validate_post.py phrase policies)
+# Allowed: consumer_health | fintech | legal | professional | education | creative | other
+sector: fintech
+
 # TONE (free text, not pseudo-quantified)
 tone: |
   Casual-credible. Drops commas. Uses fragments.
@@ -106,6 +110,9 @@ constraints:
     - politics
     - religion
     - crypto_specifics
+
+# BRAND-SPECIFIC PHRASES (validate_post.py extracts from "### Brand-specific banned" header)
+brand_specific_bans: []
 
 # REFINEMENTS (added over time from edit patterns)
 refinements: []

@@ -1,12 +1,14 @@
 # ONBOARDING — From Clone to First Published Post
 
-> Anyone can clone this repo, follow this guide, and have a brand publishing within 2 weeks. No prior context needed.
+> Anyone can clone this repo and have a brand publishing within 2 weeks. No prior context needed.
+>
+> **Two human touchpoints, that's it:** paste prompts into Higgsfield, and approve posts before publish. Everything else is agent-executable from this repo.
 
 ---
 
 ## What this repo is
 
-Multi-business content engine for Autono Labs portfolio. Generates platform-specific content for any brand with anti-AI-feel defaults, hooks-first engineering, voice-tuning, content-mix tracking, and AI-tell monitoring.
+An open-source content engine for any brand. Generates platform-specific content with anti-AI-feel defaults, hooks-first engineering, voice-tuning per brand, content-mix tracking, and AI-tell monitoring.
 
 **Built for:**
 - Multi-brand portfolio management
@@ -18,24 +20,28 @@ Multi-business content engine for Autono Labs portfolio. Generates platform-spec
 - Generates voice profile, target audience, claim registry, content mix
 - Plans weekly batches with diversity enforcement
 - Drafts captions with platform-specific hooks + narrative styles
-- Pulls media from content sources
-- Routes through Higgsfield (or manual drop) for media generation
-- Publishes via Blotato across 7 platforms
+- Routes media through Higgsfield (with human-in-the-loop prompt packets)
+- Publishes via Blotato across 9 platforms
 - Tracks performance + diversity in markdown
+- Self-improves via three loops with a human-locked compliance spine
+
+**Two human touchpoints:**
+1. **Paste prompt packets into Higgsfield UI** (paste → download → rename → drop in inbox/)
+2. **Approve posts before publish** (review captions, hit publish)
+
+Everything else — planning, drafting, validating, packet generation, pairing, publishing on approval, measuring, reweighting, voice updates — runs from this repo.
 
 ---
 
 ## Prerequisites
 
 - **Python 3.11+** with venv or uv installed
-- **Node.js 20+** (only if you want to extend the JS scripts)
-- **Accounts:**
-  - **Blotato** (publishing) — [blotato.com](https://blotato.com)
-  - **Higgsfield** (video gen, optional) — [higgsfield.ai](https://higgsfield.ai)
-  - **xAI / OpenAI / Anthropic** (research via perplexity, optional)
-  - **Playwright** for content-pull (optional)
 - **Git + GitHub account**
-- **A brand to onboard** (you'll provide the brief)
+- **A brand to onboard** (you provide the brief)
+- **Accounts (when ready to publish):**
+  - **Blotato** (publishing) — [blotato.com](https://blotato.com)
+  - **Higgsfield** (video gen, optional) — [higgsfield.ai](https://higgsfield.ai) — Ultra plan recommended
+  - **Playwright** for content-pull (optional) — `pip install playwright && playwright install`
 
 ---
 
@@ -59,87 +65,163 @@ source .venv/bin/activate  # Mac/Linux
 # Install dependencies
 pip install -r requirements.txt
 
-# Copy env template and fill in keys
+# Copy env template
 cp .env.example .env
-# Edit .env with your actual keys (see docs/ENV-WIRING.md)
+# Edit .env when you have API keys (see docs/ENV-WIRING.md)
 ```
 
 ---
 
-## 3. Run the brand-adapter skill
-
-For a new brand:
+## 3. Run doctor (preflight check)
 
 ```bash
-# Create brand folder
-mkdir -p brands/<your-brand-name>/{weeks,exemplars/edits,inbox}
-
-# Edit the brand brief file
-cp docs/templates/brand-brief.template.md brands/<your-brand-name>/brand-brief.md
-# Fill in: brand name, sector, ICP, tone notes, founder samples
-
-# Run the brand-adapter skill (via Claude/Cursor/etc)
-# Or manually walk through each step in skills/brand-adapter.md
+python scripts/doctor.py
 ```
 
-For each step in `skills/brand-adapter.md`:
-1. **Voice profile** — use `skills/voice-from-brief.md` with your brand brief
-2. **Target audience** — fill from `brands/target-audience.template.md` + `docs/audience-demographics.md`
-3. **Verified facts** — sector rules from `skills/claim-verifier.md`, fill as claims emerge
-4. **Content mix** — copy `brands/content-mix.template.md`
-5. **Performance log** — copy `brands/performance-log.template.md`
+Should report "All checks passed" (or only env-key warnings if you haven't added keys yet). If it reports missing files, your checkout is incomplete — re-clone or check git status.
 
 ---
 
-## 4. Wire Blotato accounts
-
-For each platform you want to publish on:
-
-1. **Connect account** in Blotato dashboard
-2. **Get account ID** — run:
-   ```bash
-   python scripts/blotato_list_accounts.py
-   ```
-3. **Document IDs** in `brands/<your-brand>/blotato-accounts.md` (see template below)
-
-For Facebook pages, LinkedIn company pages, YouTube playlists → get pageId/playlistId via:
-   ```bash
-   python scripts/blotato_list_subaccounts.py <platform>
-   ```
-
----
-
-## 5. Generate first batch
+## 4. Onboard your brand
 
 ```bash
-# Pick theme (1 sentence)
-# For each platform:
-#   1. Pick hook from docs/platform-hooks.md
-#   2. Pick narrative style from docs/narrative-styles.md (rotate)
-#   3. Pick visual style from docs/visual-hooks.md
-#   4. Draft caption using brand voice profile
-#   5. Run claim verifier
-#   6. Generate media brief from docs/media-brief.template.md
-#   7. Generate or manually drop media
-#   8. Log to brands/<brand>/content-mix.md
-#   9. Run scripts/blotato_publish.py to push
-#   10. Verify post URL, log to performance-log.md
+# From repo root — creates folder + copies all 7 templates:
+python scripts/onboard_brand.py --name <your-brand> --sector <sector>
+
+# Sector options: consumer_health | fintech | legal | professional | education | creative | other
 ```
 
-Detailed weekly batch flow: `docs/WEEKLY-BATCH-FLOW.md`
+This creates:
+```
+brands/<your-brand>/
+├── brand-brief.md           # FILL THIS FIRST
+├── voice-profile.md
+├── target-audience.md
+├── verified-facts.md
+├── content-mix.md
+├── performance-log.md
+├── blotato-accounts.md
+├── weeks/                   # weekly batches go here
+├── exemplars/edits/         # edit diffs accumulate here
+└── inbox/                   # media files dropped here
+```
+
+### 4a. Fill the brand brief
+
+Open `brands/<your-brand>/brand-brief.md`. The template has inline "delete me" examples showing what good looks like — delete that section before filling in your own.
+
+**Required fields:** Brand name, sector, what you do (1-3 sentences), target audience, tone (sounds like / doesn't sound like), banned phrases, founder voice samples.
+
+### 4b. Generate voice profile
+
+Use the `skills/voice-from-brief.md` skill — either with an LLM agent (Claude, Cursor, etc.) or by manually walking through its steps.
+
+The output fills in `brands/<your-brand>/voice-profile.md`. Make sure the `sector:` field at the top matches what you passed to `onboard_brand.py` (drives `validate_post.py` phrase policies).
+
+### 4c. Fill target audience + verified facts
+
+- `target-audience.md` — use `docs/audience-demographics.md` as baseline, override with brand-specific segments
+- `verified-facts.md` — apply the sector's compliance rules from `skills/claim-verifier.md`. For regulated sectors (fintech, legal, health), this is critical — the validator blocks posts that make unverified claims
+
+### 4d. Wire Blotato accounts
+
+```bash
+# Connect accounts in Blotato dashboard
+# Then list them:
+python scripts/blotato_list_accounts.py
+
+# Document IDs in brands/<your-brand>/blotato-accounts.md
+```
 
 ---
 
-## 6. Refine voice over time
+## 5. Plan your first batch
 
-After every edit pass:
 ```bash
-# Save edits to exemplars/edits/<date>.md
-# Run voice-from-brief refinement
-# Update brands/<brand>/voice-profile.md
+# Read the weekly runbook
+cat docs/WEEKLY-BATCH-FLOW.md
 ```
 
-The skill converges to actual founder voice across 10-20 edits.
+For each post:
+1. Pick a theme (rotate per `docs/diversity-rules.md`)
+2. Pick narrative style + hook pattern + visual style (rotate)
+3. Draft caption using `brands/<your-brand>/voice-profile.md` as conditioning
+4. Verify any claims against `verified-facts.md`
+
+Save captions as: `brands/<your-brand>/weeks/<YYYY-W##>/post-NN-<platform>.md`
+
+---
+
+## 6. Generate media (Higgsfield human-in-the-loop)
+
+```bash
+# 1. Write media briefs for each visual post
+# Save to brands/<your-brand>/weeks/<YYYY-W##>/media-briefs.md
+# (use docs/media-brief.template.md as format spec)
+
+# 2. Generate prompt packets
+python scripts/media_packet.py --brand <your-brand> --week <YYYY-W##>
+
+# This emits one packet per post at weeks/<YYYY-W##>/media-packets/
+
+# 3. HUMAN TOUCHPOINT 1: For each packet:
+#    a. Open the packet file
+#    b. Paste the prompt into Higgsfield UI (model + settings specified)
+#    c. Download the result
+#    d. Rename to the packet's return-filename contract (e.g., 2026-W30-01.mp4)
+#    e. Drop in brands/<your-brand>/inbox/
+
+# 4. Pair inbox files back to packets
+python scripts/pair_media.py --brand <your-brand>
+
+# This moves matched files into the week folder and reports any unmatched.
+```
+
+**Why human-in-the-loop:** Higgsfield doesn't have a public API for media generation. The packet/inbox contract makes the human's job 90 seconds per asset with zero judgment about where things go.
+
+---
+
+## 7. Validate + publish
+
+```bash
+# Validate each post against voice, claims, diversity
+python scripts/validate_post.py --brand <your-brand> --platform <platform> --text "..."
+# OR validate all posts from a captions file:
+python scripts/validate_post.py --brand <your-brand> --platform <platform> --caption-file brands/<your-brand>/weeks/<YYYY-W##>/post-NN-<platform>.md
+
+# HUMAN TOUCHPOINT 2: Review each caption before publishing
+
+# Publish approved posts
+python scripts/blotato_publish.py --brand <your-brand> --platform <platform> --text "..." --media-url "..."
+# OR via the blotato MCP tool if running in Claude/Cursor
+
+# Get post URL
+python scripts/blotato_get_post_status.py <submission-id>
+
+# Log to content-mix + performance-log (see templates for format)
+```
+
+---
+
+## 8. Track performance + iterate
+
+```bash
+# Pull engagement data weekly
+python scripts/performance_pull.py --brand <your-brand> --days 7
+
+# Surface winning patterns
+python scripts/compare_performance.py --brand <your-brand>
+
+# Run doctor to catch silent failures
+python scripts/doctor.py --brand <your-brand>
+```
+
+Each week:
+- `compare_performance.py` updates `pattern-weights.md` (Loop B in `docs/SELF-IMPROVEMENT.md`)
+- Edit diffs in `exemplars/edits/` accumulate (Loop A input)
+- Engine-level docs may get cross-brand updates via PR (Loop C)
+
+**Locked spine (never autonomous):** verified facts, sector compliance rules, approval gate, banned compliance phrases. These require human review on every change.
 
 ---
 
@@ -147,73 +229,47 @@ The skill converges to actual founder voice across 10-20 edits.
 
 ```
 content-engine-final/
-├── README.md                        # Overview (you are here next)
-├── ONBOARDING.md                    # This file — clone → publish in 2 weeks
+├── README.md                        # Overview
+├── ONBOARDING.md                    # This file
 ├── LICENSE                          # MIT
 ├── .env.example                     # API keys template
-├── .gitignore                       # Excludes secrets, generated media
+├── .gitignore
 ├── requirements.txt                 # Python deps
-├── scripts/                         # Operational scripts
-│   ├── blotato_list_accounts.py
+├── scripts/
+│   ├── onboard_brand.py             # Bootstrap new brand
+│   ├── doctor.py                    # Preflight check
+│   ├── compare_performance.py       # Pattern detection (Loop B)
+│   ├── validate_post.py             # Anti-AI + diversity + claims
+│   ├── media_packet.py              # Generate Higgsfield prompt packets
+│   ├── pair_media.py                # Pair inbox files with packets
+│   ├── content_pull.py              # Research from URLs
+│   ├── performance_pull.py          # Pull engagement data
+│   ├── blotato_client.py
 │   ├── blotato_publish.py
-│   ├── blotato_create_post.py
-│   ├── higgsfield_generate.py
-│   ├── content_pull.py
-│   └── performance_pull.py
-├── prompts/                         # Per-platform generation prompts
-│   ├── linkedin.md
-│   ├── x.md
-│   ├── instagram.md
-│   ├── tiktok.md
-│   ├── youtube-shorts.md
-│   └── threads.md
-├── docs/                            # Architecture + rules
-│   ├── platform-hooks.md
-│   ├── visual-hooks.md
-│   ├── audience-demographics.md
-│   ├── narrative-styles.md
-│   ├── anti-ai-feel.md
-│   ├── ai-tell-history.md
-│   ├── content-type-taxonomy.md
+│   ├── blotato_list_accounts.py
+│   ├── blotato_get_post_status.py
+│   └── higgsfield_generate.py       # Model registry + credit tracking
+├── docs/
+│   ├── SELF-IMPROVEMENT.md          # 3-loop architecture + locked spine
+│   ├── WEEKLY-BATCH-FLOW.md         # Operational runbook
 │   ├── diversity-rules.md
-│   ├── content-pull.md
-│   ├── publish-runbook.md
+│   ├── higgsfield-prompts.md        # Prompt library + accept/reject gates
+│   ├── compare-performance.md       # Engine documentation
 │   ├── media-brief.template.md
-│   ├── voice-profile.template.md
 │   ├── ENV-WIRING.md
-│   ├── WEEKLY-BATCH-FLOW.md
-│   ├── WEEKLY-THEME.md
 │   └── TROUBLESHOOTING.md
-├── skills/                          # Generalizable skill layer
+├── skills/
 │   ├── voice-from-brief.md
 │   ├── ai-tell-monitor.md
 │   ├── claim-verifier.md
 │   └── brand-adapter.md
-├── brands/                          # Per-brand folders
-│   ├── voice-profile.template.md
-│   ├── target-audience.template.md
-│   ├── verified-facts.template.md
-│   ├── content-mix.template.md
-│   ├── performance-log.template.md
-│   ├── brand-brief.template.md
-│   └── blotato-accounts.template.md
-└── examples/                        # Reference brand showing full structure
-    └── allsquared/
-        ├── README.md
-        ├── brand-brief.md
-        ├── voice-profile.md
-        ├── target-audience.md
-        ├── verified-facts.md
-        ├── content-mix.md
-        ├── performance-log.md
-        ├── blotato-accounts.md
-        ├── weeks/
-        │   └── 2026-W28/
-        │       ├── captions.md
-        │       └── media-briefs.md
-        ├── exemplars/
-        │   └── edits/
-        └── inbox/
+├── brands/
+│   ├── *.template.md                # 7 templates with inline examples
+│   └── <brand-name>/                # Per-brand folders
+└── examples/
+    └── allsquared/                  # Worked example
+        ├── content-mix.md           # Canonical format reference
+        └── performance-log.md
 ```
 
 ---
@@ -233,7 +289,11 @@ content-engine-final/
 
 ## What if something breaks?
 
-See `docs/TROUBLESHOOTING.md` for common issues:
+```bash
+python scripts/doctor.py        # catches the silent failures
+```
+
+See `docs/TROUBLESHOOTING.md` for:
 - Blotato auth failures
 - Higgsfield credit exhaustion
 - Claim verification rejections
@@ -244,12 +304,11 @@ See `docs/TROUBLESHOOTING.md` for common issues:
 
 ## What if I want to extend this?
 
-The architecture is meant to be extensible:
-- **Add a platform?** Create `prompts/<new-platform>.md`, add platform hooks to `docs/platform-hooks.md`, add to diversity rules
-- **Add a sector?** Add sector rule set to `skills/claim-verifier.md`
+- **Add a platform?** Add platform hooks to `docs/platform-hooks.md`, update `docs/diversity-rules.md`
+- **Add a sector?** Add sector rule set to `skills/claim-verifier.md` + `validate_post.py` policies
 - **Add a content type?** Add to `docs/content-type-taxonomy.md` + update diversity-rules.md
-- **Add a brand?** Run `skills/brand-adapter.md` with new brand brief
-- **Add a script?** Drop in `scripts/` + document in `docs/`
+- **Add a brand?** `python scripts/onboard_brand.py --name <brand> --sector <sector>`
+- **Add a script?** Drop in `scripts/` + document in `docs/` + add to `scripts/doctor.py` required list
 
 ---
 
@@ -259,7 +318,5 @@ The architecture is meant to be extensible:
 - **Discussions:** Use GitHub Discussions for Q&A
 - **Updates:** Watch repo for notifications on quarterly AI-tell refreshes
 
----
-
-**Last updated:** 2026-07-08
-**Maintainer:** Autono Labs
+**Last updated:** 2026-07-08 (v1.3 — brand-agnostic, two-touchpoint workflow, doctor preflight)
+**Maintainer:** AutonoLabs / open-source contributors
