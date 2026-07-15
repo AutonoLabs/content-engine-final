@@ -1,0 +1,225 @@
+### 1. LinkedIn milestone-call (TV spot)
+
+- Platform: linkedin
+- Format: tv-spot
+- Theme: milestone-call
+- Pattern: documentary-tv-spot
+- Aspect ratio: 16:9
+- Duration: 15
+- Subject: A tradesperson in their late 40s, alone, wearing work clothes, on a phone call
+- Scene description: A warm documentary moment. A tradesperson — sole trader, runs their own build — finishes a job, walks into a quiet back room, picks up the phone, makes one short call. No speech shown. No text. No other people. The moment of "the milestone's hit, the next one can wait."
+- Visual register: documentary, warm, lived-in, UK trade, premium register, restrained handheld camera, shallow depth of field, natural window light
+- Location: small back office of a UK building firm, late morning
+- Time of day: late morning natural daylight
+- Color palette: warm clay (#B47B5C), bone white (#F2EDE5), slate charcoal (#2A2D33), moss green (#5C6B53)
+- Action script:
+- 0-3 seconds: Quiet back office. Tradesperson sits down at a small desk, the day's dust still on their clothes. They exhale. A landline phone sits on the desk. Soft morning light from a window.
+- 3-7 seconds: They look at the phone. Reach for the receiver. Lift it. Dial tone implied (audio only, no UI). Their posture shifts from tired to focused.
+- 7-11 seconds: Close-up: shoulders relaxing, eyes attentive, a small genuine smile. They are listened to. The phone call is going well. Intimate documentary framing — close-up, shallow depth of field.
+- 11-13 seconds: Pull back. They replace the receiver gently. Sit back. A small exhale. Quiet satisfaction.
+- 13-15 seconds: Hard cut to end-card frame.
+- Negative prompts:
+- nurses
+- caregivers
+- doctors
+- medical staff
+- uniforms of any kind
+- scrubs
+- high-visibility vests
+- hi-vis
+- hard hats
+- PPE
+- steel toe caps
+- work gloves
+- name badges
+- lanyards
+- subcontractors
+- American suburbs
+- US flag
+- US dollar bills
+- palm trees
+- white picket fences
+- pure black backgrounds
+- purple-blue gradients
+- text overlays
+- on-screen captions
+- generated watermarks
+- AI logos
+- speech
+- dialogue
+- voiceover
+- narration
+- subtitles
+- Audio:
+- Music: gentle felt piano, single notes, no chords, no vocals, no lyrics
+- SFX: one natural landline telephone ring near the beginning, no other sound effects
+- Room tone: subtle ambient room presence throughout, very low level
+- Voice: no dialogue, no intelligible voices, no voiceover, no narration
+- Banned audio: no notifications, no corporate jingle, no dramatic music swell, no sound effects besides the single ring at the start
+- End card: Hard cut to a perfectly flat, motionless bone-white (#F2EDE5) background. No person, no furniture, no shadows, no gradient, no texture, no text, no symbol, no watermark, no generated logo. Leave the center empty for the authentic AllSquared branding to be added afterward.
+
+### 2. LinkedIn homeowner-reveal (TV spot)
+
+- Platform: linkedin
+- Format: tv-spot
+- Theme: homeowner-reveal
+- Pattern: documentary-tv-spot
+- Aspect ratio: 16:9
+- Duration: 15
+- Subject: A homeowner in their 50s, alone, in a finished kitchen extension, having a quiet moment
+- Scene description: A homeowner stands alone in their finished kitchen extension. The build is done. The trades have gone. They're holding a coffee, looking at the finished room. Quiet pride. No speech. No text. No one else in frame.
+- Visual register: documentary, warm, premium, UK, lived-in, shallow depth of field, natural window light, late afternoon golden hour
+- Location: completed UK kitchen extension, late afternoon golden hour, bifold doors open to a small garden
+- Time of day: late afternoon golden hour
+- Color palette: warm clay, bone white, slate charcoal, moss green
+- Action script:
+- 0-3 seconds: Empty finished kitchen. Golden hour light through bifold doors. A mug on the counter. The room, slowly revealed, with the homeowner just out of frame.
+- 3-7 seconds: The homeowner walks in from the garden, picks up the mug, looks around the room. Their posture settles. They stand still, taking it in.
+- 7-11 seconds: Close-up: hand on the mug, eyes moving across the kitchen — the brass tap, the wood worktop, the finished detail. Small smile. Quiet satisfaction.
+- 11-13 seconds: They take a sip of coffee. The moment holds.
+- 13-15 seconds: Hard cut to end-card frame.
+- Negative prompts:
+- nurses
+- caregivers
+- staff
+- medical equipment
+- uniforms of any kind
+- hard hats
+- hi-vis
+- PPE
+- badges
+- subcontractors
+- American suburbs
+- US anything
+- picket fences
+- palm trees
+- pure black backgrounds
+- purple-blue gradients
+- text overlays
+- captions
+- watermarks
+- AI logos
+- speech
+- dialogue
+- voiceover
+- subtitles
+- Audio:
+- Music: gentle felt piano, single notes, no vocals
+- SFX: soft ceramic-on-wood sound when the mug is lifted, otherwise nothing
+- Room tone: very low ambient, garden birds just audible through the bifold doors
+- Voice: no dialogue, no voiceover, no narration
+- Banned audio: no notifications, no corporate jingle, no dramatic swell
+- End card: Hard cut to a perfectly flat, motionless bone-white (#F2EDE5) background. No person, no furniture, no shadows, no gradient, no texture, no text, no symbol, no watermark, no generated logo. Leave the center empty for the authentic AllSquared branding to be added afterward.
+
+### 3. LinkedIn retention-release (single image)
+
+- Platform: linkedin
+- Format: image
+- Theme: retention-release
+- Pattern: single-image
+- Aspect ratio: 1:1
+- Resolution: 2k
+- Visual register: architectural, premium, UK
+- Scene description: A tradesperson's hand on a signed retention-release document, with the figure clearly visible. The document sits on a clean timber worktop. In the soft-focus background: a finished UK kitchen extension, brass tap, bone-white walls. Late afternoon golden hour light from a side window.
+- Location: completed UK kitchen extension, late afternoon
+- Time of day: late afternoon golden hour
+- Color palette: warm clay, bone white, slate charcoal, moss green
+- Subject focus: the signed document on a clean wooden surface, tradie's hand partially visible, no full face
+- Mood: quiet satisfaction, milestone reached, premium register
+- Negative prompts:
+- PPE
+- hi-vis
+- hard hats
+- subcontractors
+- American suburbs
+- US flags
+- picket fences
+- speech bubbles
+- captions
+- watermarks
+- AI logos
+
+### 4. LinkedIn snagging-walkthrough (3-slide carousel)
+
+- Platform: linkedin
+- Format: carousel
+- Theme: snagging-walkthrough
+- Pattern: carousel-slide
+- Aspect ratio: 4:5
+- Resolution: 2k
+- Slide total: 3
+- Visual register: lifestyle, candid, UK tradesperson
+- Location: completed UK kitchen refit, late morning
+- Time of day: late morning natural daylight
+- Color palette: warm clay, bone white, slate charcoal
+- Slide 1: A tradesperson at the entrance of a finished kitchen, notebook open, torch in hand, looking at the room with a professional eye
+- Slide 2: Close-up of tradie's hand on a cabinet hinge, notebook visible with one item ticked off, late morning light
+- Slide 3: Tradie signing a completion document on a clean surface, kitchen visible in soft focus in the background, sunlight
+- Mood: professional pride, thoroughness, the quiet end of a job done right
+- Negative prompts:
+- PPE
+- hi-vis
+- hard hats
+- subcontractors
+- American suburbs
+- US anything
+- captions
+- watermarks
+- AI logos
+- All slides must share the same lighting, register, color temperature
+
+### 5. TikTok quick-tip (vertical video, 9s)
+
+- Platform: tiktok
+- Format: video
+- Theme: quick-tip
+- Pattern: tradesperson-broll
+- Aspect ratio: 9:16
+- Duration: 9
+- Trade activity: signing a milestone payment release on a phone, the milestone-payment confirmation visible on screen
+- Building type: any
+- Time of day: natural morning
+- Color palette: warm clay, bone white, slate charcoal
+- Visual register: documentary, candid, UK, slightly looser than LinkedIn
+- Location: tradesperson's van cab or small office
+- Negative prompts:
+- hi-vis
+- PPE
+- hard hats
+- American suburbs
+- US anything
+- text overlays
+- captions
+- watermarks
+- Audio:
+- Music: light ambient, no vocals
+- Voice: tradie's actual voice, plain UK English, no music swell underneath
+- Banned audio: no trending TikTok sound, no voiceover, no dramatic music
+
+### 6. Twitter X tradesperson-broll (16:9 short video)
+
+- Platform: x
+- Format: video
+- Theme: tradesperson-broll
+- Pattern: tradesperson-broll
+- Aspect ratio: 16:9
+- Duration: 10
+- Trade activity: a tradesperson walking through a finished kitchen, hands in pockets, looking around slowly, no text
+- Building type: completed UK kitchen extension, Victorian terraced house
+- Time of day: late afternoon golden hour
+- Color palette: warm clay, bone white, slate charcoal, moss green
+- Visual register: documentary, candid, UK, premium
+- Location: completed UK kitchen extension, late afternoon
+- Negative prompts:
+- PPE
+- hi-vis
+- hard hats
+- American suburbs
+- US anything
+- captions
+- watermarks
+- AI logos
+- Audio:
+- Music: ambient, very low
+- Room tone: natural kitchen sounds, no music
+- Voice: silent

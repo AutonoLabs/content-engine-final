@@ -198,7 +198,25 @@ BASE_PATTERNS = {
             "Over-sharpened details",
         ],
     },
-    # Image / still patterns — for static posts + carousels
+    # Campaign / TV spot patterns — for branded video ads (not social posts).
+# These have a richer structure: segmented action script, explicit
+# negative-prompt lists, multi-layer audio architecture, end-card.
+    "documentary-tv-spot": {
+        "description": "Documentary-style branded TV spot (15-30s, segmented script)",
+        # The pattern's template is rendered in _build_tv_spot_packet(),
+        # NOT through the standard render_prompt() — the segmented script,
+        # negatives, audio, and end-card come from structured brief fields.
+        "template": "{placeholder}",
+        "audio_clause": None,  # multi-layer audio rendered separately
+        "reject_if": [
+            "Visible uniforms, badges, medical equipment",
+            "Sentimental framing (crying, dramatic music swell)",
+            "Visible AI-tell artifacts (uncanny stillness, smoothed skin)",
+            "Pure black backgrounds (use brand slate instead)",
+            "Speech, voiceover, captions, on-screen text, watermarks",
+        ],
+    },
+# Image / still patterns — for static posts + carousels
     "single-image": {
         "description": "Single LinkedIn-style still image",
         "template": (
@@ -248,6 +266,8 @@ def select_pattern(brief: dict) -> str:
 
     # Default selection by format + platform
     fmt = brief.get("format", "").lower()
+    if fmt == "tv-spot" or fmt == "tv_spot" or fmt == "tvspot":
+        return "documentary-tv-spot"
     if fmt == "carousel":
         return "carousel-slide"
     if fmt == "image":
@@ -282,6 +302,34 @@ def _aspect_phrase(aspect: str) -> str:
         "16:9": "landscape",
         "1.91:1": "wide",
     }.get(aspect, aspect)
+
+
+def load_brand_context(brand: str) -> str:
+    """
+    Load the brand-context prefix block from
+    brands/<brand>/higgsfield/brand-context.md.
+
+    Looks for a fenced code block marked with `BRAND CONTEXT:` and returns
+    the contents. Returns empty string if not found (caller renders packet
+    without prefix in that case, with a warning).
+    """
+    paths_to_try = [
+        REPO_ROOT / "brands" / brand / "higgsfield" / "brand-context.md",
+        REPO_ROOT / "brands" / brand / "higgsfield-brand-context.md",
+        REPO_ROOT / "brands" / brand / "brand-context.md",
+    ]
+    for p in paths_to_try:
+        if p.exists():
+            text = p.read_text()
+            # Pull out the first fenced block that starts with "BRAND CONTEXT:"
+            match = re.search(
+                r"```\s*\n(BRAND CONTEXT:[^`]+?)```",
+                text,
+                re.DOTALL,
+            )
+            if match:
+                return match.group(1).strip()
+    return ""
 
 
 def render_prompt(brief: dict, pattern_name: str) -> str:
@@ -350,8 +398,8 @@ def render_prompt(brief: dict, pattern_name: str) -> str:
     return pattern["template"].format(**fields)
 
 
-def build_packet(brief: dict, model: str, post_num: int, week: str) -> str:
-    """Build a single packet file's contents. Format-aware (video vs image)."""
+def build_packet(brief: dict, model: str, post_num: int, week: str, brand: str = "") -> str:
+    """Build a single packet file's contents. Format-aware (video vs image vs tv-spot)."""
     pattern_name = select_pattern(brief)
     pattern = BASE_PATTERNS[pattern_name]
     model_info = MODELS.get(model, MODELS["veo-3.1"])
@@ -364,6 +412,13 @@ def build_packet(brief: dict, model: str, post_num: int, week: str) -> str:
                        "16:9" if fmt == "video" else
                        "1:1")
     duration = str(brief.get("duration", 15))
+
+    # TV-spot pattern takes its own renderer (richer structure)
+    if pattern_name == "documentary-tv-spot":
+        return _build_tv_spot_packet(
+            brief, pattern, model, model_info, platform, theme, aspect, duration, post_num, week, brand
+        )
+
     prompt = render_prompt(brief, pattern_name)
 
     # Image vs video packet structure
@@ -537,8 +592,196 @@ post folder, and update the post's status to `media-ready`.
 """
 
 
+def _build_tv_spot_packet(
+    brief: dict, pattern: dict, model: str, model_info: dict,
+    platform: str, theme: str, aspect: str, duration: str,
+    post_num: int, week: str, brand: str,
+) -> str:
+    """
+    Build a packet for a documentary-style TV spot. Richer structure than
+    a standard social video — renders segmented action script, explicit
+    negative-prompt list, multi-layer audio architecture, end-card.
+
+    The brief must carry:
+      - segments: list of {start_s, end_s, description}
+      - negative_prompts: list of strings (each is one "no X" item)
+      - audio_layers: list of {layer, description} (e.g. Music, SFX, Room tone)
+      - end_card: optional string describing the end-card frame
+
+    The brand-context prefix is pulled from
+    brands/<brand>/higgsfield/brand-context.md.
+    """
+    segments = brief.get("segments", [])
+    negatives = brief.get("negative_prompts", [])
+    audio_layers = brief.get("audio_layers", [])
+    end_card = brief.get("end_card", "").strip()
+
+    brand_prefix = load_brand_context(brand) if brand else ""
+
+    # Render segmented action script
+    if segments:
+        seg_lines = []
+        for seg in segments:
+            start = seg.get("start_s", "?")
+            end = seg.get("end_s", "?")
+            desc = seg.get("description", "").strip()
+            seg_lines.append(f"- **{start}-{end} seconds:** {desc}")
+        seg_block = "\n".join(seg_lines)
+    else:
+        seg_block = "_No action-script segments provided in the brief. Add them under `- Action script:` with `0-3s: ...` sub-bullets._"
+
+    # Render negative prompts
+    if negatives:
+        neg_block = "\n".join(f"- {n}" for n in negatives)
+    else:
+        neg_block = "_No negative-prompt list provided. Add `Negative prompts:` or `Do not show:` to the brief, with `- No X` lines._"
+
+    # Render audio architecture
+    if audio_layers:
+        audio_lines = []
+        for layer in audio_layers:
+            lname = layer.get("layer", "Audio").capitalize()
+            ldesc = layer.get("description", "").strip()
+            audio_lines.append(f"- **{lname}:** {ldesc}")
+        audio_block = "\n".join(audio_lines)
+    else:
+        audio_block = "_No audio architecture provided in the brief. Add `Audio:` with sub-bullets like `- Music: ...`, `- SFX: ...`, `- Room tone: ...`._"
+
+    # Render end-card
+    if end_card:
+        end_card_block = (
+            f"## End-card frame (final 2-3 seconds)\n\n"
+            f"{end_card}\n\n"
+            f"Generate the end-card as a STATIC frame. Hold it for the last 2-3 seconds of the video. "
+            f"Leave the centre empty — the brand wordmark is added in post.\n"
+        )
+    else:
+        end_card_block = (
+            "## End-card frame (final 2-3 seconds)\n\n"
+            "_No end-card specification in the brief. Add `End card:` with a description like "
+            "'perfectly flat, motionless bone-white (#F2EDE5) background, no person, no logo, no text, centre empty for branding.'_\n"
+        )
+
+    # Optional subject description (if brief carries a `subject` or `scene_description`)
+    scene_description = brief.get("scene_description") or brief.get("subject") or ""
+
+    # Build the full prompt block. Brand prefix first, then scene,
+    # then segmented action script, then explicit negatives, then audio,
+    # then end-card direction.
+    prompt_lines = []
+    if brand_prefix:
+        prompt_lines.append(brand_prefix)
+    if scene_description:
+        prompt_lines.append("")
+        prompt_lines.append(f"SCENE: {scene_description}")
+    prompt_lines.append("")
+    prompt_lines.append("ACTION SCRIPT:")
+    prompt_lines.append(seg_block)
+    if negatives:
+        prompt_lines.append("")
+        prompt_lines.append("DO NOT SHOW (negative prompts):")
+        prompt_lines.append(neg_block)
+    if end_card:
+        prompt_lines.append("")
+        prompt_lines.append("END-CARD FRAME (final 2-3 seconds):")
+        prompt_lines.append(end_card)
+
+    full_prompt = "\n".join(prompt_lines)
+
+    return_filename = f"{week}-{post_num:02d}.{brief.get('extension', 'mp4')}"
+
+    return f"""# Packet {post_num:02d} — {platform} — {theme} (TV spot)
+
+> **Paste the prompt block into Higgsfield video model: `{model}`**
+> **Settings: {aspect}, {duration}s**
+> **Your job: paste → download → rename to `{return_filename}` → drop in `brands/{brand}/inbox/`**
+> **The agent handles everything else.**
+
+---
+
+## Settings
+
+- **Model:** `{model}` ({model_info['best_for']})
+- **Format:** documentary TV spot (segmented action script)
+- **Aspect ratio:** {aspect}
+- **Duration:** {duration}s
+- **Credit cost estimate:** ~{model_info.get(f'credit_cost_{duration}s', '?')} credits
+
+## Brand context prefix
+
+{(brand_prefix if brand_prefix else "_⚠️ No brand-context prefix loaded. Add a fenced code block starting with `BRAND CONTEXT:` to `brands/" + brand + "/higgsfield/brand-context.md`._")}
+
+## Scene description
+
+{scene_description or "_No scene_description in brief. Add `- Scene description:` line._"}
+
+## Action script (paste this with the prompt)
+
+{seg_block}
+
+## Negative prompts (paste this with the prompt)
+
+{neg_block}
+
+## Audio architecture (paste this with the prompt)
+
+{audio_block}
+
+{end_card_block}
+
+## Full prompt (copy everything below this line into the model's prompt field)
+
+```
+{full_prompt}
+```
+
+## Accept if
+
+- Reads as documentary, not stock-photo
+- Each segment lands in its assigned N-Ns window
+- Subject is consistent across all segments
+- Audio layers land at the right moments (the phone ring at the start, the chime at the end, no random dialogue in the middle)
+- The end-card frame is exactly as specified (flat, motionless, centred-empty)
+- No speech, voiceover, captions, on-screen text, watermarks, or generated logos anywhere in the video
+- Realistic skin, real hands, natural window light — no AI-tell artifacts
+
+## Reject if
+
+{chr(10).join(f"- {r}" for r in pattern['reject_if'])}
+- Any segment is wrong / missing / out of order
+- Any negative prompt appears in the output (medical equipment, uniforms, etc.)
+- Audio has random dialogue, music swell, or notification sounds
+- The end-card is not flat / has gradient / has shadow / has a generated logo
+- Anything in the BANNED section of the brand-context prefix appears
+
+## Return contract
+
+Save the downloaded file as:
+
+```
+{return_filename}
+```
+
+Drop it in: `brands/{brand}/inbox/`
+
+`pair_media.py` will scan inbox/, match this packet by filename, move it to the right
+post folder, and update the post's status to `media-ready`.
+"""
+
+
 def parse_media_briefs(week_path: Path) -> list[dict]:
-    """Parse the week's media-briefs.md into per-post dicts."""
+    """
+    Parse the week's media-briefs.md into per-post dicts.
+
+    Captures:
+    - Top-level key-value fields (existing)
+    - Negative-prompt lists under 'Negative prompts:' or 'Do not show:'
+      or any 'no_*' field
+    - Segmented action script under 'Action script:' or 'Segments:'
+      with 'N-Ns:' sub-bullets
+    - Multi-line Audio architecture
+    - End-card placeholder
+    """
     if not week_path.exists():
         return []
     text = week_path.read_text()
@@ -559,9 +802,107 @@ def parse_media_briefs(week_path: Path) -> list[dict]:
             header_parts = m.group(2).strip().split(maxsplit=1)
             if len(header_parts) > 1:
                 brief["theme"] = header_parts[1].strip()
+
         # Parse key-value fields (accept both "- **Field:** value" and "- Field: value")
+        # Also capture negative-prompt lists and action-script segments below.
+        in_action_script = False
+        in_audio_block = False
+        in_negatives_block = False
+        in_end_card_block = False
+        current_segment_seconds = None
+        current_audio_layer = None
         for line in part.split("\n"):
-            kv = re.match(r"-\s+\*?\*?(.+?):\*?\*?\s+(.+)", line.strip())
+            stripped = line.strip()
+            if not stripped:
+                in_action_script = False
+                in_audio_block = False
+                in_negatives_block = False
+                in_end_card_block = False
+                current_segment_seconds = None
+                current_audio_layer = None
+                continue
+
+            # Detect section headers
+            lower = stripped.lower()
+            if re.match(r"-\s+\*?\*?(negative|do not show|avoid|never show)\s*(prompts?)?:\*?\*?\s*$", lower):
+                in_negatives_block = True
+                in_action_script = in_audio_block = in_end_card_block = False
+                brief.setdefault("negative_prompts", [])
+                continue
+            if re.match(r"-\s+\*?\*?(action script|segments?|timeline|shot list):\*?\*?\s*$", lower):
+                in_action_script = True
+                in_audio_block = in_negatives_block = in_end_card_block = False
+                brief.setdefault("segments", [])
+                continue
+            if re.match(r"-\s+\*?\*?(audio|sound|music):\*?\*?\s*$", lower):
+                in_audio_block = True
+                in_action_script = in_negatives_block = in_end_card_block = False
+                brief.setdefault("audio_layers", [])
+                continue
+            if re.match(r"-\s+\*?\*?(end\s*card|endcard|branded\s*frame):\*?\*?\s*$", lower):
+                in_end_card_block = True
+                in_action_script = in_audio_block = in_negatives_block = False
+                brief["end_card"] = ""
+                continue
+
+            # Action-script segment: "0-3s: ..." or "0–3 seconds: ..."
+            # The optional unit (s/sec/seconds) is captured separately; the trailing
+            # ":" is also optional. We strip the captured unit from the start of the
+            # description so "0-3 seconds: foo" becomes start=0, end=3, desc="foo".
+            if in_action_script:
+                seg_match = re.match(
+                    r"-\s*(\d+)\s*[-–]\s*(\d+)\s*(seconds|sec|s)?\s*:?\s*(.+)?$",
+                    stripped,
+                    re.IGNORECASE,
+                )
+                if seg_match:
+                    start_s = int(seg_match.group(1))
+                    end_s = int(seg_match.group(2))
+                    desc = (seg_match.group(4) or "").strip()
+                    # Strip a leading "s:" / "sec:" / "seconds:" prefix that
+                    # may have been left when no colon was used
+                    desc = re.sub(r"^(seconds|sec|s)\s*:?\s*", "", desc, flags=re.IGNORECASE).strip()
+                    brief["segments"].append({
+                        "start_s": start_s, "end_s": end_s, "description": desc
+                    })
+                    continue
+                # Continuation of previous segment (line not starting with N-Ns)
+                if brief["segments"]:
+                    brief["segments"][-1]["description"] += " " + stripped.lstrip("-").strip()
+                    continue
+
+            # Audio layer: "Music: ..." or "SFX: ..." or "Voice: ..."
+            if in_audio_block:
+                layer_match = re.match(r"-\s*\*?\*?(.+?):\*?\*?\s*(.+)$", stripped)
+                if layer_match:
+                    current_audio_layer = layer_match.group(1).strip().lower()
+                    brief["audio_layers"].append({
+                        "layer": current_audio_layer,
+                        "description": layer_match.group(2).strip()
+                    })
+                    continue
+                # Continuation
+                if brief["audio_layers"]:
+                    brief["audio_layers"][-1]["description"] += " " + stripped.lstrip("-").strip()
+                    continue
+
+            # Negative prompt: "- No X" or "- Never show Y" or "- Do not include Z"
+            if in_negatives_block:
+                neg_match = re.match(r"-\s*(.+)$", stripped)
+                if neg_match:
+                    neg_text = neg_match.group(1).strip()
+                    # Strip leading "No ", "Never show ", "Do not include "
+                    neg_text = re.sub(r"^(no|never show|do not include|never)\s+", "", neg_text, flags=re.IGNORECASE)
+                    brief["negative_prompts"].append(neg_text)
+                    continue
+
+            # End-card content
+            if in_end_card_block:
+                brief["end_card"] += (brief.get("end_card", "") + " " + stripped.lstrip("-").strip()).strip()
+                continue
+
+            # Default: key-value field
+            kv = re.match(r"-\s+\*?\*?(.+?):\*?\*?\s+(.+)", stripped)
             if kv:
                 key = kv.group(1).strip().lower().replace(" ", "_")
                 brief[key] = kv.group(2).strip()
@@ -636,7 +977,7 @@ def main() -> None:
     for i, brief in enumerate(briefs, 1):
         post_num = brief.get("post_num", i)
         model = select_model(brief, args.model)
-        packet = build_packet(brief, model, post_num, args.week)
+        packet = build_packet(brief, model, post_num, args.week, brand=args.brand)
 
         platform = brief.get("platform", "linkedin").lower()
         theme = brief.get("theme", "general").lower().replace(" ", "-")
