@@ -592,6 +592,94 @@ post folder, and update the post's status to `media-ready`.
 """
 
 
+def _build_compact_prompt(
+    brand_prefix: str, scene_description: str, seg_block: str,
+    negatives: list, end_card: str, max_chars: int = 2000,
+) -> str:
+    """
+    Build a compact prompt that fits within Higgsfield's prompt-field char
+    limit. Strategy:
+
+    1. Compress the brand-prefix into a one-paragraph style brief.
+    2. Compress negatives into a comma-separated inline list.
+    3. Drop the verbose "DO NOT SHOW (negative prompts):" header —
+       the inline list speaks for itself.
+    4. Drop the verbose "ACTION SCRIPT:" header line — keep the
+       bullet structure (model parses bullets just as well).
+    5. Compress the end-card into a single line.
+    6. If still too long, truncate the brand-prefix to fit.
+
+    The full brand-context prefix and full negative list are preserved
+    in the packet output (under "Brand context (reference only)" and
+    "Full negative-prompt list"), so the human reviewer still sees them
+    when running the accept/reject checklist.
+    """
+    # Step 1: compress brand-prefix to ~400-char style brief.
+    # Extract palette hint, lighting hint, end-card hint, banned hint.
+    style_brief = (
+        "UK construction documentary, premium register, restrained "
+        "handheld camera, shallow depth of field, natural window light. "
+        "Warm clay + bone-white + slate charcoal + moss-green palette, "
+        "no pure black, no purple-blue gradients. Final 2-3s: hard cut "
+        "to a perfectly flat, motionless bone-white (#F2EDE5) frame, "
+        "centre empty for AllSquared branding to be added in post."
+    )
+    # If brand_prefix is actually short enough, just use it as-is.
+    # Otherwise fall back to the style_brief.
+    brand_compact = brand_prefix if len(brand_prefix) <= 600 else style_brief
+
+    # Step 2: negatives inline (drop header, keep list as one line)
+    neg_inline = ", ".join(negatives) if negatives else ""
+
+    # Step 3: end-card one-liner (drop the verbose "END-CARD FRAME" header)
+    end_card_line = ""
+    if end_card:
+        # Pull just the first sentence
+        first_sentence = end_card.split(".")[0].strip()
+        end_card_line = (
+            f"END-CARD: {first_sentence}. "
+            f"Perfectly flat, motionless, centre empty for branding."
+        )
+
+    # Assemble
+    parts = []
+    parts.append(brand_compact)
+    if scene_description:
+        parts.append("")
+        parts.append(f"SCENE: {scene_description}")
+    if seg_block:
+        parts.append("")
+        # Step 4: drop the "ACTION SCRIPT:" header — model reads bullets fine.
+        # The seg_block already contains "**0-3 seconds:** ..." lines.
+        parts.append(seg_block)
+    if neg_inline:
+        parts.append("")
+        # Step 4 (cont): drop "DO NOT SHOW" header, just inline the list.
+        parts.append(f"NO: {neg_inline}.")
+    if end_card_line:
+        parts.append("")
+        parts.append(end_card_line)
+
+    compact = "\n".join(parts)
+
+    # Step 5: if still over limit, hard-trim the brand_compact paragraph
+    # to make room for the rest. Keep at least 200 chars of brand_compact
+    # so the visual style still comes through.
+    if len(compact) > max_chars:
+        non_brand = "\n".join(parts[1:])  # everything except the first part
+        # Reserve room for non_brand + a marker showing truncation
+        marker = "\n\n[FULL BRAND CONTEXT IN PACKET — see 'Brand context (reference only)' below]"
+        room_for_brand = max_chars - len(non_brand) - len(marker)
+        if room_for_brand < 200:
+            room_for_brand = 200  # never drop brand_compact below 200 chars
+        brand_compact = brand_compact[:room_for_brand].rsplit(".", 1)[0] + "."
+        parts[0] = brand_compact
+        parts.append(marker)
+        compact = "\n".join(parts)
+
+    return compact
+
+
 def _build_tv_spot_packet(
     brief: dict, pattern: dict, model: str, model_info: dict,
     platform: str, theme: str, aspect: str, duration: str,
@@ -665,28 +753,42 @@ def _build_tv_spot_packet(
     # Optional subject description (if brief carries a `subject` or `scene_description`)
     scene_description = brief.get("scene_description") or brief.get("subject") or ""
 
-    # Build the full prompt block. Brand prefix first, then scene,
-    # then segmented action script, then explicit negatives, then audio,
-    # then end-card direction.
-    prompt_lines = []
-    if brand_prefix:
-        prompt_lines.append(brand_prefix)
-    if scene_description:
-        prompt_lines.append("")
-        prompt_lines.append(f"SCENE: {scene_description}")
-    prompt_lines.append("")
-    prompt_lines.append("ACTION SCRIPT:")
-    prompt_lines.append(seg_block)
-    if negatives:
-        prompt_lines.append("")
-        prompt_lines.append("DO NOT SHOW (negative prompts):")
-        prompt_lines.append(neg_block)
-    if end_card:
-        prompt_lines.append("")
-        prompt_lines.append("END-CARD FRAME (final 2-3 seconds):")
-        prompt_lines.append(end_card)
+    # Higgsfield's prompt field has a hard character limit (~2000 chars on most
+    # video models). When the rendered full prompt exceeds the limit, fall back
+    # to a compact form: condensed brand-context + scene + action script +
+    # negatives joined inline. The full brand-context prefix remains in the
+    # packet under "Brand context (reference only)" so the accept/reject
+    # checklist can still enforce those rules.
+    HIGGSFIELD_MAX_PROMPT = 2000
 
-    full_prompt = "\n".join(prompt_lines)
+    full_prompt_lines = []
+    if brand_prefix:
+        full_prompt_lines.append(brand_prefix)
+    if scene_description:
+        full_prompt_lines.append("")
+        full_prompt_lines.append(f"SCENE: {scene_description}")
+    if seg_block:
+        full_prompt_lines.append("")
+        full_prompt_lines.append("ACTION SCRIPT:")
+        full_prompt_lines.append(seg_block)
+    if negatives:
+        full_prompt_lines.append("")
+        full_prompt_lines.append("DO NOT SHOW (negative prompts):")
+        full_prompt_lines.append(neg_block)
+    if end_card:
+        full_prompt_lines.append("")
+        full_prompt_lines.append("END-CARD FRAME (final 2-3 seconds):")
+        full_prompt_lines.append(end_card)
+
+    full_prompt = "\n".join(full_prompt_lines)
+
+    # If full prompt exceeds the limit, build a compact version that fits
+    use_compact = len(full_prompt) > HIGGSFIELD_MAX_PROMPT
+    if use_compact:
+        full_prompt = _build_compact_prompt(
+            brand_prefix, scene_description, seg_block, negatives, end_card,
+            max_chars=HIGGSFIELD_MAX_PROMPT,
+        )
 
     return_filename = f"{week}-{post_num:02d}.{brief.get('extension', 'mp4')}"
 
@@ -707,7 +809,7 @@ def _build_tv_spot_packet(
 - **Duration:** {duration}s
 - **Credit cost estimate:** ~{model_info.get(f'credit_cost_{duration}s', '?')} credits
 
-## Brand context prefix
+## Brand context prefix (REFERENCE ONLY — already condensed into the pasted prompt)
 
 {(brand_prefix if brand_prefix else "_⚠️ No brand-context prefix loaded. Add a fenced code block starting with `BRAND CONTEXT:` to `brands/" + brand + "/higgsfield/brand-context.md`._")}
 
@@ -719,7 +821,7 @@ def _build_tv_spot_packet(
 
 {seg_block}
 
-## Negative prompts (paste this with the prompt)
+## Negative prompts (REFERENCE ONLY — already condensed into the pasted prompt)
 
 {neg_block}
 
@@ -731,9 +833,20 @@ def _build_tv_spot_packet(
 
 ## Full prompt (copy everything below this line into the model's prompt field)
 
+**Prompt length:** {len(full_prompt)} chars (Higgsfield limit: {HIGGSFIELD_MAX_PROMPT})
+{f"**⚠️ COMPACT MODE** — full prompt exceeded the {HIGGSFIELD_MAX_PROMPT}-char Higgsfield limit, so brand-context and negatives are condensed. The full versions are preserved below for the accept/reject checklist." if use_compact else ""}
+
 ```
 {full_prompt}
 ```
+
+## Brand context (reference only — already condensed into the prompt above)
+
+{(brand_prefix if brand_prefix else "_No brand-context prefix loaded._")}
+
+## Full negative-prompt list (reference only — already condensed into the prompt above)
+
+{neg_block}
 
 ## Accept if
 

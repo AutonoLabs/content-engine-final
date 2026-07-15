@@ -15,7 +15,7 @@
 - **Duration:** 15s
 - **Credit cost estimate:** ~? credits
 
-## Brand context prefix
+## Brand context prefix (REFERENCE ONLY — already condensed into the pasted prompt)
 
 BRAND CONTEXT: AllSquared (allsquared.com) — escrow + milestone payments for UK construction projects. Visual style: documentary, premium, restrained, lived-in, UK trade register. NOT stock-photo, NOT American suburban, NOT AI-hype, NOT corporate SaaS. Looks like a still from a high-end UK property programme. Color palette: warm clay #B47B5C (primary accent, use sparingly — a paint swatch, a brass tap, a wood detail), bone white #F2EDE5 (light backgrounds, walls, linen), slate charcoal #2A2D33 (dark surfaces, NOT pure black — use for door frames, hinges, hardware), moss green #5C6B53 (the only saturated green — exterior doors, planters, mature hedging — use sparingly, this is the "garden after work" colour). Every image must include 1-2 brand colors naturally placed. No pure black backgrounds. No purple-blue gradients. No American flag colors. No construction PPE in frame (hats, hi-vis, steel toe caps). BANNED: drill-pointing-at-camera, before/after side-by-side cheap framing, motivational poster typography, stock handshakes, stock handshake-with-hardhat, anyone in hi-vis clothing, generic spreadsheet-on-laptop, finished interiors with a single bed sheet in frame (signals an estate photo), any UK house exterior with a "For Sale" or estate-agent sign, American suburbs, white picket fences, palm trees, distressed wood effects, "fixer upper" aesthetic. CAMERA: restrained handheld, shallow depth of field, natural window light, warm but not amber. Looks shot on a Cooke S4 32mm lens or similar documentary-prime. For VIDEO: 15s with no speech, no on-screen text, no captions, no UI. Final 2-3 seconds transition to a perfectly flat, motionless bone-white (#F2EDE5) frame; leave the center empty for the AllSquared logo to be added in post.
 
@@ -31,7 +31,7 @@ A warm documentary moment. A tradesperson — sole trader, runs their own build 
 - **11-13 seconds:** Pull back. They replace the receiver gently. Sit back. A small exhale. Quiet satisfaction.
 - **13-15 seconds:** Hard cut to end-card frame.
 
-## Negative prompts (paste this with the prompt)
+## Negative prompts (REFERENCE ONLY — already condensed into the pasted prompt)
 
 - nurses
 - caregivers
@@ -81,19 +81,29 @@ _No end-card specification in the brief. Add `End card:` with a description like
 
 ## Full prompt (copy everything below this line into the model's prompt field)
 
+**Prompt length:** 1803 chars (Higgsfield limit: 2000)
+**⚠️ COMPACT MODE** — full prompt exceeded the 2000-char Higgsfield limit, so brand-context and negatives are condensed. The full versions are preserved below for the accept/reject checklist.
+
 ```
-BRAND CONTEXT: AllSquared (allsquared.com) — escrow + milestone payments for UK construction projects. Visual style: documentary, premium, restrained, lived-in, UK trade register. NOT stock-photo, NOT American suburban, NOT AI-hype, NOT corporate SaaS. Looks like a still from a high-end UK property programme. Color palette: warm clay #B47B5C (primary accent, use sparingly — a paint swatch, a brass tap, a wood detail), bone white #F2EDE5 (light backgrounds, walls, linen), slate charcoal #2A2D33 (dark surfaces, NOT pure black — use for door frames, hinges, hardware), moss green #5C6B53 (the only saturated green — exterior doors, planters, mature hedging — use sparingly, this is the "garden after work" colour). Every image must include 1-2 brand colors naturally placed. No pure black backgrounds. No purple-blue gradients. No American flag colors. No construction PPE in frame (hats, hi-vis, steel toe caps). BANNED: drill-pointing-at-camera, before/after side-by-side cheap framing, motivational poster typography, stock handshakes, stock handshake-with-hardhat, anyone in hi-vis clothing, generic spreadsheet-on-laptop, finished interiors with a single bed sheet in frame (signals an estate photo), any UK house exterior with a "For Sale" or estate-agent sign, American suburbs, white picket fences, palm trees, distressed wood effects, "fixer upper" aesthetic. CAMERA: restrained handheld, shallow depth of field, natural window light, warm but not amber. Looks shot on a Cooke S4 32mm lens or similar documentary-prime. For VIDEO: 15s with no speech, no on-screen text, no captions, no UI. Final 2-3 seconds transition to a perfectly flat, motionless bone-white (#F2EDE5) frame; leave the center empty for the AllSquared logo to be added in post.
+UK construction documentary, premium register, restrained handheld camera, shallow depth of field, natural window light. Warm clay + bone-white + slate charcoal + moss-green palette, no pure black, no purple-blue gradients. Final 2-3s: hard cut to a perfectly flat, motionless bone-white (#F2EDE5) frame, centre empty for AllSquared branding to be added in post.
 
 SCENE: A warm documentary moment. A tradesperson — sole trader, runs their own build — finishes a job, walks into a quiet back room, picks up the phone, makes one short call. No speech shown. No text. No other people. The moment of "the milestone's hit, the next one can wait."
 
-ACTION SCRIPT:
 - **0-3 seconds:** Quiet back office. Tradesperson sits down at a small desk, the day's dust still on their clothes. They exhale. A landline phone sits on the desk. Soft morning light from a window.
 - **3-7 seconds:** They look at the phone. Reach for the receiver. Lift it. Dial tone implied (audio only, no UI). Their posture shifts from tired to focused.
 - **7-11 seconds:** Close-up: shoulders relaxing, eyes attentive, a small genuine smile. They are listened to. The phone call is going well. Intimate documentary framing — close-up, shallow depth of field.
 - **11-13 seconds:** Pull back. They replace the receiver gently. Sit back. A small exhale. Quiet satisfaction.
 - **13-15 seconds:** Hard cut to end-card frame.
 
-DO NOT SHOW (negative prompts):
+NO: nurses, caregivers, doctors, medical staff, uniforms of any kind, scrubs, high-visibility vests, hi-vis, hard hats, PPE, steel toe caps, work gloves, name badges, lanyards, subcontractors, American suburbs, US flag, US dollar bills, palm trees, white picket fences, pure black backgrounds, purple-blue gradients, text overlays, on-screen captions, generated watermarks, AI logos, speech, dialogue, voiceover, narration, subtitles.
+```
+
+## Brand context (reference only — already condensed into the prompt above)
+
+BRAND CONTEXT: AllSquared (allsquared.com) — escrow + milestone payments for UK construction projects. Visual style: documentary, premium, restrained, lived-in, UK trade register. NOT stock-photo, NOT American suburban, NOT AI-hype, NOT corporate SaaS. Looks like a still from a high-end UK property programme. Color palette: warm clay #B47B5C (primary accent, use sparingly — a paint swatch, a brass tap, a wood detail), bone white #F2EDE5 (light backgrounds, walls, linen), slate charcoal #2A2D33 (dark surfaces, NOT pure black — use for door frames, hinges, hardware), moss green #5C6B53 (the only saturated green — exterior doors, planters, mature hedging — use sparingly, this is the "garden after work" colour). Every image must include 1-2 brand colors naturally placed. No pure black backgrounds. No purple-blue gradients. No American flag colors. No construction PPE in frame (hats, hi-vis, steel toe caps). BANNED: drill-pointing-at-camera, before/after side-by-side cheap framing, motivational poster typography, stock handshakes, stock handshake-with-hardhat, anyone in hi-vis clothing, generic spreadsheet-on-laptop, finished interiors with a single bed sheet in frame (signals an estate photo), any UK house exterior with a "For Sale" or estate-agent sign, American suburbs, white picket fences, palm trees, distressed wood effects, "fixer upper" aesthetic. CAMERA: restrained handheld, shallow depth of field, natural window light, warm but not amber. Looks shot on a Cooke S4 32mm lens or similar documentary-prime. For VIDEO: 15s with no speech, no on-screen text, no captions, no UI. Final 2-3 seconds transition to a perfectly flat, motionless bone-white (#F2EDE5) frame; leave the center empty for the AllSquared logo to be added in post.
+
+## Full negative-prompt list (reference only — already condensed into the prompt above)
+
 - nurses
 - caregivers
 - doctors
@@ -125,7 +135,6 @@ DO NOT SHOW (negative prompts):
 - voiceover
 - narration
 - subtitles
-```
 
 ## Accept if
 
