@@ -23,7 +23,11 @@ import os
 import sys
 import requests
 from typing import Optional
-from dotenv import load_dotenv  # noqa: E402
+
+try:
+    from dotenv import load_dotenv  # type: ignore
+except ImportError:
+    load_dotenv = None  # type: ignore
 
 
 AVAILABLE_MODELS = {
@@ -151,7 +155,8 @@ def main():
         return
 
     # Only load .env when actually generating (not for --list-models)
-    load_dotenv()
+    if load_dotenv is not None:
+        load_dotenv()
 
     api_key = os.getenv("HIGGSFIELD_API_KEY")
     if not api_key:

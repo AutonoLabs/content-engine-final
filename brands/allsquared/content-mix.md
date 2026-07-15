@@ -103,25 +103,25 @@
 - W28: escrow-milestone, team-intro, milestone-dispute
 - W29: (planned) retention, snagging-ceremony, regulatory-clarity, founder-story
 ### 2026-07-22 — LinkedIn — retention
-- Format: image-square
+- Format: image
 - Theme: retention
 - Narrative style: specific-number
 - Hook pattern: statement
 - Visual style: architectural
 - Audience segment: UK project owner
 - Caption file: brands/allsquared/weeks/2026-W29/post-01-linkedin.md
-- Media file: brands/allsquared/weeks/2026-W29/media-packets/2026-W29-01.mp4
+- Media file: brands/allsquared/weeks/2026-W29/media-packets/2026-W29-01.jpg
 - Status: draft
-- Notes: W29 fresh post. Tests retention angle per W28 retro. 5% + £3,000 added to verified-facts.
+- Notes: W29 fresh post. Tests retention angle per W28 retro. 5% + £3,000 added to verified-facts. Image asset (1:1, nano-banana-pro) — packet 01.
 
 ### 2026-07-22 — LinkedIn — snagging-ceremony
-- Format: image-square
+- Format: carousel
 - Theme: snagging-ceremony
 - Narrative style: observation
 - Hook pattern: statement
 - Visual style: lifestyle
 - Audience segment: UK tradesperson
 - Caption file: brands/allsquared/weeks/2026-W29/post-02-linkedin.md
-- Media file: brands/allsquared/weeks/2026-W29/media-packets/2026-W29-02.mp4
+- Media files: 2026-W29-02-slide-1.png, -2.png, -3.png
 - Status: draft
-- Notes: W29 fresh post. Hits UK tradesperson segment. Different narrative style from W28 batch.
+- Notes: W29 fresh post. Hits UK tradesperson segment. Different narrative style from W28 batch. Carousel (3 slides, 4:5, nano-banana-pro) — packets 02-slide-1/2/3.

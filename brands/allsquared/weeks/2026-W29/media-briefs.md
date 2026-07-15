@@ -1,23 +1,35 @@
 ### 1. LinkedIn retention
 - Platform: linkedin
+- Format: image
 - Theme: retention
-- Pattern: milestone-celebration
-- Duration: 8
+- Pattern: single-image
+- Aspect ratio: 1:1
+- Resolution: 2k
 - Visual register: architectural, premium, UK
-- Trade activity: signing retention release document
-- Building type: renovated Victorian terraced house
+- Scene description: Builder's hand holding a UK construction retention release document, signed, with a £3,000 figure visible. Background shows finished kitchen extension, golden hour light through bifold doors.
+- Location: completed Victorian kitchen extension, late afternoon
 - Time of day: late afternoon golden hour
-- Celebration action: hand signing completion certificate
-- Location: kitchen extension, finished renovation visible
+- Subject focus: the signed retention document on a clean wooden surface, builder's hand partially visible
+- Color palette: warm timber, brass fixtures, soft natural light
+- Mood: quiet satisfaction, milestone reached, professional
+- No faces in frame, hands only
 
 ### 2. LinkedIn snagging-ceremony
 - Platform: linkedin
+- Format: carousel
 - Theme: snagging-ceremony
-- Pattern: milestone-celebration
-- Duration: 8
+- Pattern: carousel-slide
+- Aspect ratio: 4:5
+- Resolution: 2k
+- Slide total: 3
 - Visual register: lifestyle, candid, UK tradesperson register
-- Trade activity: builder inspecting finished work with notebook
-- Building type: completed kitchen refit
-- Time of day: morning natural light
-- Celebration action: builder walking through finished space making notes
-- Location: completed kitchen, daylight
+- Subject: builder walking through completed kitchen with notebook, marking snagging items
+- Slide 1: Builder at the entrance of finished kitchen, notebook open, torch in hand, looking at the room with professional eye
+- Slide 2: Close-up of builder's hand on a cabinet hinge, notebook visible with item ticked off, late morning light
+- Slide 3: Builder signing completion/satisfaction document on a clean surface, kitchen visible in background, sunlight
+- Location: completed Victorian kitchen refit, late morning
+- Time of day: late morning natural daylight
+- Color palette: warm white, soft wood, natural light, candid feel
+- Mood: professional pride, thoroughness, the quiet end of a job done right
+- No full faces, hands + tools + documents + finished work
+- All slides must share the same lighting, register, color temperature

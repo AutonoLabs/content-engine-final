@@ -30,18 +30,19 @@ What changes when retention has a deadline built into the platform, not just the
 
 ## Metadata
 
-- Format: image-square
-- Theme: retention
-- Narrative style: specific-number
-- Hook pattern: statement
-- Visual style: architectural
-- Audience segment: UK project owner
-- Caption file: brands/allsquared/weeks/2026-W29/post-01-linkedin.md
-- Media file: TBD (Higgsfield packet below)
-- Status: draft
-- Length: 1,043 chars (within 700-1100 LinkedIn target)
-- Voice check: UK English, no banned terms, no contrast-frame, no compound hook, fragments in middle paragraph, opening is statement (not question/let-me-preamble)
-- Claims check: 5% and £3,000 are illustrative ranges for retention amount; should be in verified-facts.md as standard industry practice
+- **Format:** image (1:1, single asset via Higgsfield nano-banana-pro)
+- **Theme:** retention
+- **Narrative style:** specific-number
+- **Hook pattern:** statement
+- **Visual style:** architectural
+- **Audience segment:** UK project owner
+- **Caption file:** brands/allsquared/weeks/2026-W29/post-01-linkedin.md
+- **Media file:** `2026-W29-01.jpg` (1:1, packet 01)
+- **Status:** draft
+- **Length:** 1,043 chars (within 700-1100 LinkedIn target)
+- **Voice check:** UK English, no banned terms, no contrast-frame, no compound hook, fragments in middle paragraph, opening is statement (not question/let-me-preamble)
+- **Claims check:** 5% and £3,000 are illustrative ranges for retention amount; verified-facts.md covers both as JCT industry-standard
+- **Media plan:** Generate 1 image (1:1) via Higgsfield nano-banana-pro. See packet 01 for prompt + accept/reject gates.
 
 ---
 

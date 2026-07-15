@@ -34,26 +34,25 @@ What does your snagging process look like right now?
 
 ## Metadata
 
-- Format: image-square (or could be carousel, see note below)
-- Theme: snagging-ceremony
-- Narrative style: observation
-- Hook pattern: statement
-- Visual style: lifestyle
-- Audience segment: UK tradesperson
-- Caption file: brands/allsquared/weeks/2026-W29/post-02-linkedin.md
-- Media file: TBD (Higgsfield packet below)
-- Status: draft
-- Length: 1,098 chars (within 700-1100 LinkedIn target)
-- Voice check: UK English, no banned terms, fragment openings, no engagement bait, no contrast-frame, "Boring. Important." mirrors the voice profile's "Boring. That's the point." pattern (intentional)
-- Claims check: no statistics, observational only
+- **Format:** carousel (3 slides, 4:5 via Higgsfield nano-banana-pro)
+- **Theme:** snagging-ceremony
+- **Narrative style:** observation
+- **Hook pattern:** statement
+- **Visual style:** lifestyle
+- **Audience segment:** UK tradesperson
+- **Caption file:** brands/allsquared/weeks/2026-W29/post-02-linkedin.md
+- **Media files:** `2026-W29-02-slide-1.png`, `-2.png`, `-3.png` (4:5, packets 02-slide-1/2/3)
+- **Status:** draft
+- **Length:** 1,098 chars (within 700-1100 LinkedIn target)
+- **Voice check:** UK English, no banned terms, fragment openings, no engagement bait, no contrast-frame, "Boring. Important." mirrors the voice profile's "Boring. That's the point." pattern (intentional)
+- **Claims check:** no statistics, observational only
+- **Media plan:** Generate 3 images (4:5 each) via Higgsfield nano-banana-pro. Each slide gets its own packet (slide-1, slide-2, slide-3). Visual style must be cohesive across slides (same lighting, register, color temp).
 
 ---
 
 ## Note on format
 
-Could work as image-square or as a 3-slide carousel (the snagging moment, the snagging list, the release). Image-square is the safer bet for first test on this theme.
-
----
+Carousel chosen over single image because the snagging-ceremony theme has natural narrative beats: arrival → inspection → close. 3 slides lets each beat breathe without overcrowding any one frame.
 
 ## Higgsfield packet
 
