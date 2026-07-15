@@ -200,24 +200,33 @@ def render_prompt(brief: dict, pattern_name: str) -> str:
     """Render the full prompt with brand-specific variables substituted."""
     pattern = BASE_PATTERNS.get(pattern_name, BASE_PATTERNS["workflow-cinematic"])
 
-    # Fill template with brief fields, with sensible defaults
+    # Fill template with brief fields, with sensible defaults.
+    # Prefer brief-provided values; only use defaults if brief didn't supply them.
+    def val(key: str, default: str) -> str:
+        # Check both raw key and lowercase variants
+        return brief.get(key) or brief.get(key.lower()) or default
+
+    # Smart mapping: brief's "Trade activity" or "Action" can fill either
+    # trade_activity (for tradesperson-broll) or celebration_action
+    # (for milestone-celebration), depending on what the pattern needs.
+    action = val("action", val("trade_activity", val("celebration_action", "")))
+
     fields = {
-        "duration": brief.get("duration", "15"),
-        "trade_activity": brief.get("trade_activity", "tiling work in progress"),
-        "building_type": brief.get("building_type", "Victorian terraced house"),
-        "time_of_day": brief.get("time_of_day", "natural afternoon"),
-        "person_description": brief.get("person_description",
+        "duration": val("duration", "15"),
+        "trade_activity": action or "tiling work in progress",
+        "building_type": val("building_type", "Victorian terraced house"),
+        "time_of_day": val("time_of_day", "natural afternoon"),
+        "person_description": val("person_description",
                                           "UK founder in their 30s, smart-casual"),
-        "location": brief.get("location", "small London office"),
-        "celebration_action": brief.get("celebration_action",
-                                          "hand signing a milestone document"),
-        "surface": brief.get("surface", "matte wooden desk"),
-        "direction": brief.get("direction", "upper-left"),
-        "product_description": brief.get("product_description",
+        "location": val("location", "small London office"),
+        "celebration_action": action or "hand signing a milestone document",
+        "surface": val("surface", "matte wooden desk"),
+        "direction": val("direction", "upper-left"),
+        "product_description": val("product_description",
                                            "laptop showing escrow dashboard"),
-        "scene_description": brief.get("scene_description",
-                                          "active construction site"),
-        "surface_material": brief.get("surface_material", "weathered brick"),
+        "scene_description": val("scene_description",
+                                          val("scene", "active construction site")),
+        "surface_material": val("surface_material", val("material", "weathered brick")),
     }
 
     return pattern["template"].format(**fields)
@@ -315,11 +324,16 @@ def parse_media_briefs(week_path: Path) -> list[dict]:
         if m:
             brief["post_num"] = int(m.group(1))
             brief["title"] = m.group(2).strip()
-        # Parse key-value fields
+            # Extract theme from header if present (e.g. "1. LinkedIn retention")
+            header_parts = m.group(2).strip().split(maxsplit=1)
+            if len(header_parts) > 1:
+                brief["theme"] = header_parts[1].strip()
+        # Parse key-value fields (accept both "- **Field:** value" and "- Field: value")
         for line in part.split("\n"):
-            kv = re.match(r"-\s+\*\*(.+?):\*\*\s+(.+)", line.strip())
+            kv = re.match(r"-\s+\*?\*?(.+?):\*?\*?\s+(.+)", line.strip())
             if kv:
-                brief[kv.group(1).strip().lower().replace(" ", "_")] = kv.group(2).strip()
+                key = kv.group(1).strip().lower().replace(" ", "_")
+                brief[key] = kv.group(2).strip()
         briefs.append(brief)
     return briefs
 

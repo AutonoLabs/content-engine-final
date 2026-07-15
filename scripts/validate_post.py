@@ -296,9 +296,30 @@ def split_multi_post(text: str) -> list:
     """
     Split a captions.md file into individual posts.
     Splits on '### ' headers that start with a date.
+    For each block, extract ONLY the caption body (between `## Caption` and
+    the next `## Metadata` / `## Note` / `## Higgsfield packet` section).
+    This prevents metadata like "Length: 1,043 chars" or "Week 2026-W29"
+    from being validated as caption text.
     """
     parts = re.split(r"(?=^###\s+\d{4}-\d{2}-\d{2})", text, flags=re.MULTILINE)
-    return [p.strip() for p in parts if p.strip()]
+    result = []
+    for part in parts:
+        if not part.strip():
+            continue
+        # Extract the caption body: between "## Caption" and the next "## " section
+        caption_match = re.search(
+            r"^##\s+Caption\s*\n(.*?)(?=^##\s+(?:Metadata|Note|Higgsfield|Cross|$)|\Z)",
+            part,
+            re.MULTILINE | re.DOTALL,
+        )
+        if caption_match:
+            body = caption_match.group(1).strip()
+            if body:
+                result.append(body)
+                continue
+        # Fallback: no ## Caption section found — validate whole block
+        result.append(part.strip())
+    return result
 
 
 def validate_one(text: str, platform: str, brand: dict,
