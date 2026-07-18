@@ -111,9 +111,20 @@ def load_brand_voice(brand: str) -> dict:
         if (brand_path / "content-mix.md").exists() else ""
     )
 
-    # Extract sector from voice-profile.md or inferred from brand path
-    sector_match = re.search(r"\*\*Sector:\*\*\s*(\w+)", voice["voice_profile"])
-    voice["sector"] = sector_match.group(1) if sector_match else None
+    # Sector: brand.yaml is the machine source of truth; voice-profile prose
+    # is the legacy fallback.
+    voice["sector"] = None
+    voice["compliance"] = None
+    try:
+        import brand_config
+        cfg = brand_config.load_brand(brand)
+        voice["sector"] = cfg.get("sector")
+        voice["compliance"] = brand_config.load_compliance(brand)
+    except Exception:
+        pass
+    if not voice["sector"]:
+        sector_match = re.search(r"\*\*Sector:\*\*\s*(\w+)", voice["voice_profile"])
+        voice["sector"] = sector_match.group(1) if sector_match else None
 
     # Extract brand-specific banned phrases (scoped, not global)
     voice["brand_specific_bans"] = []
@@ -322,6 +333,28 @@ def split_multi_post(text: str) -> list:
     return result
 
 
+def check_compliance(text: str, platform: str, compliance: Optional[dict]) -> list:
+    """
+    Enforce brands/<brand>/compliance.yaml (locked spine, human-curated).
+    - banned_claim_patterns: case-insensitive regexes that block the post
+    - mandatory_disclaimers: per-platform (or 'default') string that MUST appear
+    """
+    if not compliance:
+        return []
+    issues = []
+    for pattern in compliance.get("banned_claim_patterns") or []:
+        try:
+            if re.search(pattern, text, re.IGNORECASE):
+                issues.append(f"COMPLIANCE: banned claim pattern matched: /{pattern}/")
+        except re.error:
+            issues.append(f"COMPLIANCE: invalid regex in compliance.yaml: /{pattern}/")
+    disclaimers = compliance.get("mandatory_disclaimers") or {}
+    required = disclaimers.get(platform, disclaimers.get("default"))
+    if required and required.lower() not in text.lower():
+        issues.append(f"COMPLIANCE: missing mandatory disclaimer: '{required}'")
+    return issues
+
+
 def validate_one(text: str, platform: str, brand: dict,
                  proposed_format: Optional[str] = None) -> list:
     """Run all checks against a single post. Returns list of issues."""
@@ -334,6 +367,7 @@ def validate_one(text: str, platform: str, brand: dict,
     all_issues.extend(check_claims(text, brand.get("verified_facts", "") or ""))
     all_issues.extend(check_diversity(brand.get("content_mix", "") or "",
                                        proposed_format))
+    all_issues.extend(check_compliance(text, platform, brand.get("compliance")))
     return all_issues
 
 

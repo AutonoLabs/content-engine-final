@@ -1,3 +1,11 @@
+---
+platform: linkedin
+format: text-only
+theme: retention
+narrative: specific-number
+hook: statement
+status: validated
+---
 # Week 2026-W29 — AllSquared — LinkedIn Post 1 (DRAFT)
 
 > Theme: retention. Narrative: specific-number. Hook: statement.

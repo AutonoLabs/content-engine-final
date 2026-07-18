@@ -40,6 +40,11 @@ BRAND_REQUIRED_FILES = [
 
 # Files that MUST exist at repo root for the engine to function
 REPO_REQUIRED_FILES = [
+    "portfolio.yaml",
+    "scripts/engine.py",
+    "scripts/brand_config.py",
+    "scripts/notion_sync.py",
+    "docs/post-file-spec.md",
     "ONBOARDING.md",
     "README.md",
     "LICENSE",
@@ -125,7 +130,7 @@ def check_env_keys() -> list[str]:
         ("BLOTATO_API_KEY", "Multi-platform publishing"),
     ]
     # Don't fail on HIGGSFIELD/XAI/REPLICATE — they're manual-paste workflows
-    keys_optional = ["HIGGSFIELD_API_KEY", "XAI_API_KEY", "REPLICATE_API_KEY"]
+    keys_optional = ["HIGGSFIELD_API_KEY", "XAI_API_KEY", "REPLICATE_API_TOKEN"]
 
     import os
     for key, purpose in keys_expected:
@@ -146,6 +151,37 @@ def check_brand(brand: str) -> list[str]:
     for f in BRAND_REQUIRED_FILES:
         if not (brand_path / f).exists():
             issues.append(f"brands/{brand}/ missing: {f}")
+
+    # Machine config (brand.yaml) — required by engine.py / notion_sync.py
+    try:
+        import brand_config
+        if not (brand_path / "brand.yaml").exists():
+            issues.append(f"brands/{brand}/ missing: brand.yaml (engine can't schedule)")
+        else:
+            cfg = brand_config.load_brand(brand)
+            wired = [k for k, v in cfg.get("platforms", {}).items()
+                     if v.get("account_id")]
+            if not wired:
+                issues.append(
+                    f"brands/{brand}/brand.yaml: no platform has an account_id "
+                    f"(fill from blotato_list_accounts.py before scheduling)")
+        if brand not in brand_config.portfolio_brands():
+            issues.append(f"brands/{brand}/ not listed in portfolio.yaml")
+        # Portfolio brands with an author must have the overlay + author profile
+        entry = brand_config.load_brand(brand)
+        if entry.get("author"):
+            if not (brand_path / "voice-overlay.md").exists():
+                issues.append(f"brands/{brand}/ missing: voice-overlay.md "
+                              f"(author '{entry['author']}' declared)")
+            portfolio = brand_config.load_portfolio()
+            ap = portfolio.get("owner", {}).get("author_profile")
+            if ap and not (REPO_ROOT / ap).exists():
+                issues.append(f"portfolio.yaml author_profile missing: {ap}")
+        if entry.get("compliance_file"):
+            if not (brand_path / entry["compliance_file"]).exists():
+                issues.append(f"brands/{brand}/ missing: {entry['compliance_file']}")
+    except Exception as e:
+        issues.append(f"brands/{brand}/: brand.yaml check failed ({e})")
 
     # Content-mix + performance-log parse check
     from compare_performance import parse_content_mix, parse_performance_log
@@ -237,10 +273,18 @@ def main() -> None:
         if not issues:
             print(f"  ✓ brands/{args.brand}/ looks healthy")
     else:
-        # Check all brand folders
+        # Check all brands declared in portfolio.yaml (plus any stray folders)
         if BRANDS_DIR.exists():
-            brands = [d.name for d in BRANDS_DIR.iterdir() if d.is_dir()]
-            brands = [b for b in brands if b not in ("yapper", "test-brand")]  # skip optional
+            try:
+                import brand_config
+                brands = brand_config.portfolio_brands()
+                strays = [d.name for d in BRANDS_DIR.iterdir()
+                          if d.is_dir() and d.name not in brands]
+                for s in strays:
+                    all_issues.append(f"brands/{s}/ exists but not in portfolio.yaml")
+                    print(f"  ✗ brands/{s}/ exists but not in portfolio.yaml")
+            except Exception:
+                brands = [d.name for d in BRANDS_DIR.iterdir() if d.is_dir()]
             for brand in sorted(brands):
                 print(f"\n→ Brand: {brand}")
                 issues = check_brand(brand)

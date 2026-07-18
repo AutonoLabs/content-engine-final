@@ -6,6 +6,7 @@
 
 🔗 **Repo:** https://github.com/AutonoLabs/content-engine-final
 📖 **Start here:** [`ONBOARDING.md`](./ONBOARDING.md)
+📊 **Dashboard (Notion):** https://www.notion.so/3a192bfcb729811dafb4eaf1242e6711 — brands + post pipeline, synced by `scripts/notion_sync.py`
 🐛 **Issues:** https://github.com/AutonoLabs/content-engine-final/issues
 
 ---
@@ -22,6 +23,35 @@ A complete content engine + publishing pipeline for any brand:
 6. **Publishing layer** — Blotato integration, multi-platform scheduling
 7. **Tracking layer** — content-mix + performance-log in markdown
 8. **Skill layer** — four generalizable skills that work for any new business
+
+---
+
+## Orchestrator (v1.8)
+
+The 11-step runbook is now one CLI, driven by `portfolio.yaml` + per-brand
+`brand.yaml` + post-file frontmatter (`docs/post-file-spec.md`):
+
+```bash
+python scripts/engine.py status                              # portfolio overview
+python scripts/engine.py plan --all --week 2026-W31          # scaffold every brand's week (incl. cross-brand slots)
+python scripts/engine.py validate --brand legal --week 2026-W31   # anti-AI + claims + compliance.yaml
+python scripts/engine.py approve  --brand legal --week 2026-W31   # human gate (or merge the week PR)
+python scripts/engine.py schedule --brand legal --week 2026-W31   # Blotato, auto-logs content-mix
+python scripts/engine.py measure                             # performance pull + pattern compare, all brands
+python scripts/engine.py sync-notion                         # refresh the Notion dashboard
+```
+
+**End-to-end automation** (`.github/workflows/`): Monday cron opens a `week/YYYY-W##`
+PR with every brand's plan scaffold → drafting happens on the branch → **PR review is
+the human approval gate** → merge schedules the batch via Blotato → daily cron pulls
+performance, updates pattern weights (Loop B), and syncs the Notion dashboard.
+Needs repo secrets `BLOTATO_API_KEY` + `NOTION_API_KEY`.
+
+**Multi-domain:** brands are grouped in `portfolio.yaml` (`client` vs
+`personal-portfolio`: `legal` / `labs` / `personal`). Portfolio brands share one
+author voice (`authors/eli/author-profile.md`) with per-brand `voice-overlay.md`
+deltas, cross-post via `relationships:` (reshape + stagger, never verbatim), and
+`legal` carries a hard-enforced `compliance.yaml` (locked spine).
 
 ---
 
@@ -64,7 +94,7 @@ content-engine-final/
 │   ├── content-pull.md
 │   ├── publish-runbook.md
 │   ├── media-brief.template.md
-│   ├── voice-profile.template.md
+│   ├── post-file-spec.md
 │   ├── ENV-WIRING.md
 │   ├── WEEKLY-BATCH-FLOW.md
 │   └── TROUBLESHOOTING.md
@@ -88,7 +118,14 @@ content-engine-final/
 │   ├── performance-log.template.md
 │   ├── brand-brief.template.md
 │   └── blotato-accounts.template.md
+├── portfolio.yaml                   # Portfolio manifest (brands, relationships, notion)
+├── authors/eli/author-profile.md    # Base voice for the personal portfolio
+├── .github/workflows/               # Weekly plan PR / publish-on-merge / daily measure
 ├── scripts/                         # Operational pipeline code
+│   ├── engine.py                    # Orchestrator CLI (status/plan/validate/approve/schedule/measure)
+│   ├── brand_config.py              # portfolio.yaml + brand.yaml + frontmatter loader
+│   ├── notion_sync.py               # Notion dashboard sync
+│   ├── replicate_generate.py        # Automated image path (no human in the loop)
 │   ├── blotato_client.py            # Blotato API wrapper
 │   ├── blotato_list_accounts.py
 │   ├── blotato_publish.py

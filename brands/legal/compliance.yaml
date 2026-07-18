@@ -1,0 +1,30 @@
+# Legal-sector compliance — HARD-enforced by scripts/validate_post.py.
+# This file is part of the locked spine (docs/SELF-IMPROVEMENT.md):
+# human-only, never edited by any loop. Every change needs a dated entry
+# in the changelog at the bottom.
+
+jurisdiction: AU-WA          # adjust per practising jurisdiction
+regulator: Legal Practice Board of Western Australia
+
+# Regex patterns that BLOCK a post outright (case-insensitive).
+banned_claim_patterns:
+  - "guarantee[ds]? (a |an )?(win|outcome|result)"
+  - "we (always|never) (win|lose)"
+  - "no win,? no fee"            # only with an approved costs-agreement disclosure — keep blocked by default
+  - "best (lawyer|law firm|legal team)"
+  - "specialist"                 # protected term in AU unless accredited — human review required
+  - "100% success"
+
+# Strings that MUST appear in the post (per platform) or validation fails.
+mandatory_disclaimers:
+  linkedin: "General information only — not legal advice."
+  default: "General information only — not legal advice."
+
+# Topics that always require human review even if patterns pass.
+human_review_topics:
+  - client matters (never post about identifiable matters, even anonymised)
+  - fees and costs
+  - outcomes of specific cases
+
+# Changelog (append-only, human-only)
+# 2026-07-18 — initial rule set (engine scaffold)

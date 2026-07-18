@@ -1,0 +1,22 @@
+# Machine config for the Autono Labs domain (personal portfolio).
+name: labs
+display_name: Autono Labs
+sector: professional
+group: personal-portfolio
+cadence: weekly
+timezone: Australia/Perth
+
+author: eli
+voice_overlay: voice-overlay.md
+
+platforms:
+  linkedin:
+    account_id: ""
+  x:
+    account_id: ""
+
+defaults:
+  formats: [text-only, image-square, thread]
+  posts_per_week: 3
+  automated_media: [image-square]
+  manual_media: [video-short]

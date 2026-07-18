@@ -1,0 +1,51 @@
+# When a week PR merges (human approval gate passed), mark validated posts
+# approved and schedule the entire week via Blotato in one shot.
+name: Publish on merge
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  schedule:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'week/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Approve + schedule all brands for the merged week
+        env:
+          BLOTATO_API_KEY: ${{ secrets.BLOTATO_API_KEY }}
+        run: |
+          WEEK="${GITHUB_HEAD_REF#week/}"
+          python - <<'EOF'
+          import os, subprocess, sys
+          sys.path.insert(0, "scripts")
+          import brand_config
+          week = os.environ["GITHUB_HEAD_REF"].removeprefix("week/")
+          for brand in brand_config.portfolio_brands():
+              if week in brand_config.list_weeks(brand):
+                  subprocess.run([sys.executable, "scripts/engine.py", "approve",
+                                  "--brand", brand, "--week", week], check=True)
+                  subprocess.run([sys.executable, "scripts/engine.py", "schedule",
+                                  "--brand", brand, "--week", week], check=True)
+          EOF
+      - name: Commit status updates (frontmatter + content-mix)
+        run: |
+          git config user.name "content-engine-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A brands/
+          git diff --cached --quiet || git commit -m "engine: schedule ${GITHUB_HEAD_REF#week/} (status + content-mix)"
+          git push
+      - name: Sync Notion dashboard
+        if: always()
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+        run: python scripts/notion_sync.py || echo "notion sync skipped"

@@ -200,7 +200,7 @@ LinkedIn: "statement-hook" wins
 
 ## Examples
 
-See `examples/allsquared/weeks/2026-W28/` for a worked example (with captions + media-briefs). Run:
+See `brands/allsquared/weeks/2026-W29/` for a worked example (with captions + media-briefs). Run:
 
 ```bash
 python scripts/compare_performance.py --brand allsquared

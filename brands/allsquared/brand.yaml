@@ -1,0 +1,26 @@
+# Machine config for AllSquared. Human knowledge stays in the .md files.
+name: allsquared
+display_name: AllSquared
+sector: fintech
+group: client
+cadence: weekly
+timezone: Europe/London
+
+# Platform -> Blotato account wiring. Replace placeholder IDs with real ones
+# from `python scripts/blotato_list_accounts.py`. blotato-accounts.md stays
+# as the human-facing record; THIS is what engine.py reads.
+platforms:
+  linkedin:
+    account_id: ""        # required before `engine schedule`
+    page_id: ""
+  x:
+    account_id: ""
+  tiktok:
+    account_id: ""
+    is_ai_generated: true
+
+defaults:
+  formats: [text-only, image-square, carousel, video-short]
+  posts_per_week: 4
+  automated_media: [image-square, carousel]   # replicate_generate.py path
+  manual_media: [video-short, tv-spot]        # Higgsfield packet/inbox path
