@@ -1,3 +1,11 @@
+---
+platform: linkedin
+format: carousel
+theme: snagging-ceremony
+narrative: observation
+hook: statement
+status: validated
+---
 # Week 2026-W29 — AllSquared — LinkedIn Post 2 (DRAFT)
 
 > Theme: snagging-ceremony. Narrative: observation. Hook: statement.

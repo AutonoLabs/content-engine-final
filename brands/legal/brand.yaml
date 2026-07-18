@@ -1,0 +1,21 @@
+# Machine config for the legal-practice domain (personal portfolio).
+name: legal
+display_name: Bernstein Legal
+sector: legal
+group: personal-portfolio
+cadence: weekly
+timezone: Australia/Perth
+
+author: eli                       # inherits authors/eli/author-profile.md
+voice_overlay: voice-overlay.md   # register deltas on top of the author profile
+compliance_file: compliance.yaml  # hard-enforced by validate_post.py
+
+platforms:
+  linkedin:
+    account_id: ""
+
+defaults:
+  formats: [text-only, image-square]
+  posts_per_week: 2
+  automated_media: [image-square]
+  manual_media: []

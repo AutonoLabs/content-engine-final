@@ -135,10 +135,26 @@ python scripts/blotato_list_accounts.py
 
 ---
 
+### 4e. Register in portfolio.yaml + brand.yaml
+
+Add your brand to `portfolio.yaml` (`brands:` section) and fill
+`brands/<your-brand>/brand.yaml` — sector, platform→account-ID wiring (from
+step 4d), and defaults. This is what `scripts/engine.py` reads; the .md files
+stay the human knowledge layer. `python scripts/doctor.py` verifies both.
+
+---
+
 ## 5. Plan your first batch
 
 ```bash
-# Read the weekly runbook
+# The orchestrator wraps the runbook steps:
+python scripts/engine.py plan --brand <your-brand> --week $(date +%Y-W%V)
+# Draft posts as post-NN-<platform>.md per docs/post-file-spec.md, then:
+python scripts/engine.py validate --brand <your-brand>
+python scripts/engine.py approve --brand <your-brand>    # human gate
+python scripts/engine.py schedule --brand <your-brand>   # publishes + logs content-mix
+
+# Full runbook detail:
 cat docs/WEEKLY-BATCH-FLOW.md
 ```
 

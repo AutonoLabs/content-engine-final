@@ -1,0 +1,24 @@
+# Machine config for Eli's personal brand (personal portfolio).
+name: personal
+display_name: Eli Bernstein
+sector: professional
+group: personal-portfolio
+cadence: weekly
+timezone: Australia/Perth
+
+author: eli
+voice_overlay: voice-overlay.md
+
+# Personal brand mostly amplifies labs/legal via portfolio.yaml relationships
+# (mode: reshape, staggered) plus 1-2 native posts a week.
+platforms:
+  linkedin:
+    account_id: ""
+  x:
+    account_id: ""
+
+defaults:
+  formats: [text-only, thread]
+  posts_per_week: 2
+  automated_media: []
+  manual_media: []

@@ -1,0 +1,36 @@
+# Daily measurement: pull engagement, run pattern comparison (Loop B),
+# push results + refresh the Notion dashboard. No human in this loop —
+# it only writes logs/weights, never posts.
+name: Daily measure
+on:
+  schedule:
+    - cron: "30 5 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Pull performance + compare patterns
+        env:
+          BLOTATO_API_KEY: ${{ secrets.BLOTATO_API_KEY }}
+        run: python scripts/engine.py measure || echo "measure completed with warnings"
+      - name: Commit updated logs + weights
+        run: |
+          git config user.name "content-engine-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A brands/
+          git diff --cached --quiet || git commit -m "measure: daily performance pull + pattern weights"
+          git push
+      - name: Sync Notion dashboard
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+        run: python scripts/notion_sync.py || echo "notion sync skipped"

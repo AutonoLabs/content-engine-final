@@ -1,0 +1,65 @@
+# Portfolio manifest — machine source of truth for the multi-brand engine.
+# Human knowledge stays in markdown; anything a script needs lives here or in
+# brands/<brand>/brand.yaml.
+#
+# Used by: scripts/engine.py, scripts/doctor.py, scripts/notion_sync.py,
+# .github/workflows/*.
+
+owner:
+  name: Eli Bernstein
+  author_profile: authors/eli/author-profile.md   # base voice for the personal portfolio
+
+brands:
+  allsquared:
+    sector: fintech
+    group: client
+    cadence: weekly
+    priority: 1
+  yapper:
+    sector: consumer_health
+    group: client
+    cadence: weekly
+    priority: 2
+  legal:
+    sector: legal
+    group: personal-portfolio
+    cadence: weekly
+    priority: 3
+    author: eli            # inherits authors/eli/author-profile.md, see brands/legal/voice-overlay.md
+  labs:
+    sector: professional
+    group: personal-portfolio
+    cadence: weekly
+    priority: 3
+    author: eli
+  personal:
+    sector: professional
+    group: personal-portfolio
+    cadence: weekly
+    priority: 3
+    author: eli
+
+# Cross-brand publishing relationships. The planner uses these to derive
+# posts instead of drafting the same story twice, and to stagger collisions.
+relationships:
+  - source: labs
+    target: personal
+    mode: reshape          # rewrite with a personal angle, never verbatim
+    stagger_days: 1
+  - source: legal
+    target: personal
+    mode: reshape
+    stagger_days: 2
+
+# Portfolio-level scheduling rules (enforced by `engine plan`)
+scheduling:
+  max_posts_per_day_per_platform: 1   # across ALL brands sharing an audience
+  collision_groups:                   # brands whose audiences overlap
+    - [labs, personal, legal]
+
+# Notion dashboard wiring — created 2026-07-18, synced by scripts/notion_sync.py
+# (share the dashboard page with your Notion integration, key in .env NOTION_API_KEY)
+notion:
+  dashboard_page_url: "https://www.notion.so/3a192bfcb729811dafb4eaf1242e6711"
+  brands_db_id: "813bbcd643d54388b4074d340fa2d89e"
+  posts_db_id: "4d5d255a657c4d97bb6ad9bc738d8284"

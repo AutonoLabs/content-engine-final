@@ -311,7 +311,7 @@ If a prompt fails twice with the same model, switch models. Don't retry the same
 - `docs/media-brief.template.md` — the 6-field brief template per post
 - `docs/visual-hooks.md` — what stops the scroll per platform
 - `docs/audience-demographics.md` — who's on each platform
-- `examples/allsquared/weeks/2026-W28/media-briefs.md` — worked example
+- `brands/allsquared/weeks/2026-W30/media-briefs.md` — worked example
 - `scripts/higgsfield_generate.py` — automation, credit-mode enforcement
 
 ---

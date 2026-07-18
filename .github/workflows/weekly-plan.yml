@@ -1,0 +1,42 @@
+# Weekly plan PR — opens the week's scaffolding for every brand in
+# portfolio.yaml. Drafting happens in the PR branch (agent or human);
+# approving + merging the PR IS the human approval gate.
+name: Weekly plan
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Scaffold week plans
+        id: plan
+        run: |
+          WEEK=$(date +%Y-W%V)
+          echo "week=$WEEK" >> "$GITHUB_OUTPUT"
+          python scripts/engine.py plan --all --week "$WEEK"
+      - name: Open week PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: "week/${{ steps.plan.outputs.week }}"
+          title: "Week ${{ steps.plan.outputs.week }} — content batch"
+          commit-message: "plan: scaffold ${{ steps.plan.outputs.week }} for all brands"
+          body: |
+            Weekly batch for ${{ steps.plan.outputs.week }}.
+
+            - [ ] Draft posts per `docs/post-file-spec.md` (agent or human)
+            - [ ] `python scripts/engine.py validate --brand <b> --week ${{ steps.plan.outputs.week }}`
+            - [ ] Review captions (this PR review IS the approval gate)
+
+            Merging schedules all approved posts via the publish-on-merge workflow.
